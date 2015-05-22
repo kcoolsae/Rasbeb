@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC
+        '-//W3C//DTD XHTML 1.0 Transitional//EN'
+        'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'/>
+    <link href='../css/style.css' rel='stylesheet' type='text/css'/>
+    <link href='../css/layout.css' rel='stylesheet' type='text/css'/>
+    <title>[?RS] Bebras online</title>
+</head>
+<body>
+<div id='general_wrapper'>
+    <div id='banner'>
+        <div id='banner_content'>
+           <div id='banner_title'>
+               <h1>Comment inscrire des élèves ?</h1>
+           </div>
+        </div>
+    </div>
+    <div id='contents'>
+        <!-- TODO: élève: masculin ou feminin? -->
+        <p>Pour inscrire des élèves au Bebras online il faut suivre les étapes suivantes :
+        <ul>
+            <li>Enregistrez-vous comme professeur à l'<b>école</b> correcte.</li>
+            <li>Ajouter la <b>classe</b> des élèves à l'école.</li>
+            <li>Télécharger les données des élèves que vous souhaitez enregistrer en forme de <b>fichier Excel</b>.</li>
+        </ul>
+        <p>Sur cette page nous expliquons en détail la forme exacte de ce fichier.</p>
+
+        <h3>Structure du fichier Excel</h3>
+        <p>[ Vous pouvez télécharger un exemple d'un tel fichier <a href="example.xlsx">ici</a> ]</p>
+
+        <p>Le fichier qu'il faut préparer ressemble à ceci:</p>
+        <div class="centered">
+            <img src="example.png"/>
+        </div>
+        <p>Lignes vides et lignes dont la première cellule commence avec # seront ignorés. Chaque rangé
+            correspond à un seul élève.
+           Les colonnes doivent être structurées comme ceci:</p>
+        
+        <ul>
+            <li>Colonne <b>A</b>: la <b>classe</b> de l'élève. (Obligatoire.)
+                Utilisez la même abréviation que vous avez utilizé en ajoutant la classe à l'école.</li>
+            <li>Colonne <b>B</b>: le <b>nom de famille</b> de l'élève. (Obligatoire.)</li>
+            <li>Colonne <b>C</b>: le <b>prénom</b> de l'élève. ( Obligatoire. )</li>
+            <li>Colonne <b>D</b>: l'<b>adresse e-mail</b> de l'élève. (Peut bien être laissé vide.)
+                Utiliser de préférence une adresse e-mail qui persistera assez longtemps.</li>
+            <li>Colonne <b>E</b>: le sexe de l'élève. (Obligatoire - M ou F.) Ce champ sera utilisé seulement
+                pour le traitement statistique des résultats .</li>
+            <li>Colonnes <b>F</b> et <b>G</b>: laissez ces champs vides pour le moment. (Voir ci-dessous.)</li>
+        </ul>
+        <p>Il n'est pas nécessaire de mettre tous les éleves dans un seul fichier ou de les télécharger tous à la fois.
+            Le même fichier peut contenir des élèves de différentes classes, mais <b>pas de différentes écoles</b>.
+        <h2>ID Bebras et mot de passe</h2>
+
+        <p>Lors du téléchargement un <b>ID Bebras</b> et un mot de passe seront générés par le système.
+            Les élèves en auront besoin pour se connecter et participer au concours. L'ID Bebras pourra être réutilisée
+            l'année prochaine. Les élèves peuvent changer leur mot de passe après qu'ils sont connectés.
+            Il est recommandé de le faire dès que possible.</p>
+        <p>Après, vous pourrez <b>télécharger</b> un fichier Excel contenant les données pour tous les élèves inscrits
+            à votre école.</p>
+    </div>
+    <div id='footer'>
+        <div id="footer_content">
+            <div id="footer_left_block">
+                <a href="http://www.bebras.be/">Bebras.be</a>
+            </div>
+            <div id="footer_center_block">2014 © Universiteit Gent</div>
+            <div id="footer_right_block">Page d'aide</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+

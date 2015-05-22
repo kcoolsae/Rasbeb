@@ -1,0 +1,76 @@
+@* main.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(pageId: String, scripts: Html = Html(""), stylesheets: Html = Html(""))(content: => Html)
+
+@* ===============================
+ * Main page template
+ * =============================== *@
+
+<!DOCTYPE html PUBLIC
+        '-//W3C//DTD XHTML 1.0 Transitional//EN'
+        'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'/>
+    <link href='http://fonts.googleapis.com/css?family=Overlock:700' rel='stylesheet' type='text/css'/>
+    <link href='http://fonts.googleapis.com/css?family=Fanwood+Text' rel='stylesheet' type='text/css'/>
+    <link href='@routes.Assets.at("css/main.css")' rel='stylesheet' type='text/css'/>
+    @stylesheets
+    @scripts
+    <title>[@pageId] Bebras online</title>
+    @* TODO: javascript etc. *@
+</head>
+<body>
+<div id='general_wrapper'>
+    <div id='header'>Bebras online</div>
+    <div id='content'>
+        @content
+    </div>
+    <div id='footer'>
+        <div id="footer_content">
+            <div id="footer_left_block">
+                <a href="http://www.bebras.be">Bebras.be</a>
+            </div>
+            <div id="footer_center_block">2014 © Universiteit Gent</div>
+            <div id="footer_right_block">
+                @if(session.containsKey("bebrasId")) {
+                    @Messages("bebras.id") <b>@session.get("bebrasId")</b>
+                    @buttonForm(routes.Authentication.logout){@Messages("caption.logout")}
+                } else {
+                    @Messages("message.not.logged.in")
+                }
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

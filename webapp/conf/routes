@@ -1,0 +1,179 @@
+# routes
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Copyright (C) 2015 Universiteit Gent
+#
+# This file is part of the Rasbeb project, an interactive web
+# application for Bebras competitions.
+#
+# Corresponding author:
+#
+# Kris Coolsaet
+# Department of Applied Mathematics, Computer Science and Statistics
+# Ghent University
+# Krijgslaan 281-S9
+# B-9000 GENT Belgium
+#
+# The Rasbeb Web Application is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# The Rasbeb Web Application is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with the Degage Web Application (file LICENSE in the
+# distribution).  If not, see <http://www.gnu.org/licenses/>.
+
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Starting page
+# - redirects to language negotiation if necessary
+# - redirects to landing page if already logged in
+
+GET     /                   controllers.Application.index()
+GET     /home               controllers.Application.home()
+GET     /home/teacher       controllers.TeacherSchools.homeTeacher()
+GET     /home/organizer     controllers.Application.homeOrganizer()
+GET     /home/student       controllers.Application.homeStudent()
+
+# First time initialization
+
+GET     /first              controllers.Authentication.firstAdministratorForm()
+POST    /first              controllers.Authentication.firstAdministratorCreate()
+
+# Language negotiation
+
+GET     /language           controllers.Language.init()
+POST    /language/:lang     controllers.Language.choose(lang: String)
+
+# Authentication related
+
+GET     /login              controllers.Authentication.loginForm()
+POST    /login              controllers.Authentication.login()
+
+POST    /logout             controllers.Authentication.logout()
+
+GET     /switch/:userId     controllers.Authentication.switchTo(userId: Int)
+
+GET     /changepass         controllers.Authentication.changePasswordForm()
+POST    /changepass         controllers.Authentication.changePassword()
+
+# Registration
+# Important! URL must start with /register. This is hard coded in class Registration
+
+
+GET     /register/teacher     controllers.Registration.start()
+POST    /register/token       controllers.Registration.sendToken()
+
+POST    /register/language/:lang     controllers.Registration.chooseLanguage(lang: String, token: String)
+GET     /register/next/:token   controllers.Registration.next(token: String)
+POST    /register/next/:token   controllers.Registration.createTeacher(token: String)
+
+GET     /register/list        controllers.Registration.list()
+
+# Reset password
+# Important! URL must start with /reset. This is hard coded in class Registration.
+
+GET     /reset/start             controllers.Reset.start()
+POST    /reset/token             controllers.Reset.sendToken()
+GET     /reset/next/:token              controllers.Reset.next(token: String)
+POST    /reset/next/:token              controllers.Reset.newPassword(token: String)
+
+# Questions
+
+GET     /questions          controllers.ListQuestions.list(f:QuestionsFilter ?= QuestionsFilter(null,null), s: Sorter ?= Sorter("TITLE",true), p: Pager ?= Pager(0,10))
+POST    /questions/filter   controllers.ListQuestions.filter(s:Sorter,p:Pager)
+POST    /questions/size     controllers.ListQuestions.resize(f:QuestionsFilter,s:Sorter,offset: Int)
+
+GET     /question/new       controllers.Questions.showNew()
+POST    /question/new       controllers.Questions.createNew()
+
+GET     /question/:id       controllers.Questions.preview(id: Int)
+
+POST    /question/ei/:id      controllers.Questions.updateExternalId(id: Int)
+POST    /question/na/:id       controllers.Questions.updateNumberOfAnswers(id: Int)
+POST    /question/:id/:lang    controllers.Questions.updateI18n(id: Int, lang: String)
+
+# Contests
+
+GET     /contest/new        controllers.Contests.showNew()
+POST    /contest/new        controllers.Contests.createNew()
+
+GET     /contest/:id/wd     controllers.Contests.showWithDefaults(id: Int)
+GET     /contest/:id        controllers.Contests.show(id: Int, f:QuestionsFilter ?= QuestionsFilter(null,null), s: Sorter ?= Sorter("TITLE",true), p: Pager ?= Pager(0,10))
+POST    /contest/:id        controllers.Contests.update(id: Int)
+POST    /contest/:id/marks   controllers.Contests.adjustMarks(id: Int)
+
+POST    /contest/:id/process   controllers.Contests.process(id:Int,f:QuestionsFilter,s:Sorter,p:Pager)
+POST    /contest/:id/size     controllers.Contests.resize(id:Int,f:QuestionsFilter,s:Sorter,offset: Int)
+
+GET     /contest/:id/sort                controllers.Contests.showForSorting(id: Int)
+POST    /contest/:id/swap   controllers.Contests.swap(id: Int)
+
+# Preview (organizers only)
+
+GET     /preview/list                              controllers.Preview.list()
+GET     /preview/first/:contestId/:level           controllers.Preview.showFirstQuestion(contestId: Int, level: Int)
+GET     /preview/question/:contestId/:level/:lang/:id   controllers.Preview.showQuestion(contestId: Int, level: Int, lang: String, id: Int)
+
+# Participation (i.e., contest being run)
+
+GET     /part/new/:id/:level    controllers.Participations.showStart(id: Int, level: Int)
+GET     /part/newLocal/:id      controllers.Participations.showLocalStart(id: Int)
+POST    /part/start/:id/:level  controllers.Participations.start(id: Int, level: Int)
+POST    /part/startLocal/:id    controllers.Participations.startLocal(id: Int)
+
+GET     /part/question/:index   controllers.Participations.showQuestion(index: Int)
+POST    /part/question/:index   controllers.Participations.answer(index: Int)
+GET     /part/feedback/:index   controllers.Participations.showFeedback(index: Int)
+
+GET     /part/finished          controllers.Participations.showFinished()
+POST    /part/finished          controllers.Participations.finished()
+GET     /part/closed            controllers.Participations.showClosed()
+GET     /part/localClosed       controllers.Participations.showLocalClosed()
+GET     /part/overview          controllers.Participations.showOverview(id: Int)
+GET     /part/terminate         controllers.Participations.showTerminate()
+POST    /part/terminate         controllers.Participations.terminate()
+
+# Schools
+
+GET     /schools            controllers.Schools.list(f:SchoolsFilter ?= SchoolsFilter(null,null,null,null), s:Sorter ?= Sorter("NAME",true), p:Pager ?= Pager(0,10))
+POST    /schools/filter     controllers.Schools.filter(s:Sorter,p:Pager)
+POST    /schools/size       controllers.Schools.resize(f:SchoolsFilter,s:Sorter,offset: Int)
+
+GET     /school/:id         controllers.Schools.show(id:Int)
+GET     /school/new         controllers.Schools.showNew()
+
+# Teacher related
+
+GET     /teacher/schools/wd        controllers.TeacherSchools.showWithDefaults()
+GET     /teacher/schools           controllers.TeacherSchools.show(f:SchoolsFilter ?= SchoolsFilter(null,null,null,null), s:Sorter ?= Sorter("NAME",true), p:Pager ?= Pager(0,10))
+POST    /teacher/schools/process   controllers.TeacherSchools.process(f:SchoolsFilter,s:Sorter,p:Pager)
+POST    /teacher/schools/size      controllers.TeacherSchools.resize(f:SchoolsFilter,s:Sorter,offset: Int)
+
+POST    /teacher/classes/:id    controllers.TeacherSchools.addClasses(id: Int)
+
+GET     /teacher/students/show/:id      controllers.TeacherSchools.showStudents(id: Int)
+POST    /teacher/students/upload/:id    controllers.TeacherSchools.uploadStudents(id: Int)
+GET     /teacher/students/download/:id  controllers.TeacherSchools.downloadStudents(id: Int)
+
+
+GET     /teacher/contests/list                     controllers.TeacherContests.list()
+GET     /teacher/contests/start/:id          controllers.TeacherContests.start(id: Int)
+POST    /teacher/contests/manage/:id       controllers.TeacherContests.manage(id: Int)
+POST    /teacher/contests/grouped/:id/:classId  controllers.TeacherContests.grouped(id: Int, classId: String)
+
+GET     /teacher/contest/new        controllers.TeacherContests.showNew()
+POST    /teacher/contest/new        controllers.TeacherContests.createNew()
+
+POST    /teacher/contest/status/:id/:status     controllers.TeacherContests.changeStatus(id: Int, status: Int)
+
+GET     /teacher/scores/start      controllers.Scores.start()
+POST     /teacher/scores/show      controllers.Scores.show()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

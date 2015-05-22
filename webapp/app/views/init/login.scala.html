@@ -1,0 +1,85 @@
+@* login.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(f: Form[Authentication.LoginData])
+
+@loginButton(caption: String)(note: Html = Html(""))={
+<tr>
+    <td></td>
+    <td><button>@caption</button></td>
+    <td>@note</td>
+</tr>
+}
+
+@anonymous("LGN") {
+    @nlfren{
+        <h2>Aanmelden</h2>
+        @globalErrors(f)
+        @form(action = routes.Authentication.login) {
+            @inputText(field = f("login"), '_label -> "E-mailadres of Bebras ID")
+            @inputPassword(field = f("password"), '_label -> "Wachtwoord" )
+
+            @loginButton("Aanmelden"){
+                (<a href="@routes.Reset.start()">Wachtwoord vergeten?</a>)
+            }
+        }
+        <p>Heb je nog geen Bebras Id? Vraag dan aan je leerkracht om je in te schrijven.
+           Hij/zij kan je ook een nieuw wachtwoord bezorgen als je het oude bent vergeten.</p>
+        <p class="footnote">Ben je zelf leraar? Vraag dan aan een collega die al in het systeem is geregistreerd om ook jou te registreren.</p>
+    }{
+        <h2>Connecter</h2>
+        @globalErrors(f)
+        @form(action = routes.Authentication.login) {
+            @inputText(field = f("login"), '_label -> "Adresse e-mail ou ID Bebras")
+            @inputPassword(field = f("password"), '_label -> "Mot de passe" )
+            @loginButton("Connecter"){
+                (<a href="@routes.Reset.start()">Mot de passe oublié?</a>)
+            }
+        }
+        <p>Pour obtenir un code Bebras demandez votre enseignant de vous inscrire. Il/elle peut aussi créer
+        un nouveau mot de passe pour vous si vous ne vous souvenez pas de l'ancien. </p>
+        <p class="footnote">Êtes-vous vous-même un enseignant? Alors demandez à un collègue qui est déjà enregistré au système de vous inscrire aussi.</p>
+    }{
+        <h2>Login</h2>
+        @globalErrors(f)
+        @form(action = routes.Authentication.login) {
+            @inputText(field = f("login"), '_label -> "Email address or Bebras ID")
+            @inputPassword(field = f("password"), '_label -> "Password" )
+            @loginButton("Login"){
+                (<a href="@routes.Reset.start()">Forgot your password?</a>)
+            }
+        }
+
+        <p>To obtain a Bebras Id you need to ask your teacher to register you. He/she can also create
+            a new password for you if you can't remember the old one. </p>
+        <p class="footnote">Are you a teacher yourself? Then ask a colleague that is already registered with the system to also register you.</p>
+    }
+}

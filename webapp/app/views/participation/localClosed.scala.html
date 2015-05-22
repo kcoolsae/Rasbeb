@@ -1,0 +1,57 @@
+@* localClosed.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@()
+
+@* Tell the user he has finished the contest - the non-public case *@
+
+@user("TLC") {
+
+@nlfren{
+<h2>De wedstrijd is afgelopen</h2>
+
+<p>Je kan je score bekijken via de startpagina.</p>
+<p>Het kan wel nog even duren vooraleer dit resultaat
+ter beschikking staat. Voor de internationale wedstrijd duurt dit zeker tot ná de officiële wedstrijdweek.</p>
+}{
+<h2>Le concours est terminé</h2>
+<p>Vous pouvez consulter vos points sur la page d'accueil.</p>
+
+<p>Il se peut durer un certain temps avant que ce résultat est disponible. Pour le concours international il faut
+    attendre au moins jusqu'à après la semaine de concours officielle.</p>
+}{
+<h2>The contest is finished</h2>
+<p>You can see your score on the home page.</p>
+<p>It may take a while before this result is available. For the international contest you will
+have to wait at least until after the official contest week.</p>
+}
+
+}

@@ -1,0 +1,65 @@
+@* show.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(contest: Contest, level: Level, minutes : Int)
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+}
+@anonymous("TSH", stylesheets = stylesheets) {
+
+    <h2>@contest.getTitle</h2>
+    <div class="subtitle">
+        @nlfren{Moeilijkheidsgraad:}{Niveau:}{Level:} <b>@level.getName</b> - @level.getDescription
+    </div>
+
+    <p>@nlfren{
+    Zodra je de wedstrijd hebt afgewerkt, krijg je je score te zien en gedetaileerde feedback over de juiste antwoorden.
+    }{
+    Dès que vous avez terminé le concours, on vous fournira vos points et des commentaires détaillés sur les réponses correctes.
+    }{
+    As soon as you have completed the contest you get to see your score and detailed feedback on the correct answers.
+    }
+    </p>
+    <div class="centered">
+    @buttonForm(action=routes.Participations.start(contest.getId,level.getLevel)){
+        @nlfren{Begin de wedstrijd - start de klok}{Commencer l'épreuve - démarrer l'horloge}{Start the competition - start the clock}
+    }
+    </div>
+    <p>@nlfren{
+    Je krijgt <b>@minutes</b> minuten om alle vragen op te lossen.
+    }{
+    Vous avez <b>@minutes</b> minutes pour résoudre toutes les questions.
+    }{
+    You get <b>@minutes</b> minutes to solve all the questions.
+    }
+    </p>
+}

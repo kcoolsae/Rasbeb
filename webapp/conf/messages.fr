@@ -1,0 +1,130 @@
+# messages.fr
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Copyright (C) 2015 Universiteit Gent
+#
+# This file is part of the Rasbeb project, an interactive web
+# application for Bebras competitions.
+#
+# Corresponding author:
+#
+# Kris Coolsaet
+# Department of Applied Mathematics, Computer Science and Statistics
+# Ghent University
+# Krijgslaan 281-S9
+# B-9000 GENT Belgium
+#
+# The Rasbeb Web Application is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# The Rasbeb Web Application is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with the Degage Web Application (file LICENSE in the
+# distribution).  If not, see <http://www.gnu.org/licenses/>.
+
+# Form constraints
+
+constraint.required=Champ obligatoire
+
+
+# Form errors
+
+error.required=Le champ ne peut être vide.
+error.passwords.differ=Les deux mots de passe doivent être identiques.
+error.extendedemail=Adresse email invalide.
+
+# Other errors
+
+error.first=Il existe déjà un compte administrateur
+error.login=Échec de la connexion, l''identification ou mot de passe n''est pas valide, \
+            ou l''accès est bloqué.
+error.password=Mot de passe invalide
+error.registration.token=L''enregistrement n''est pas réussie. Peut-être vous avez \
+            attendu trop longtemps ou il y avait une erreur dans l''adresse e-mail \
+            que vous avez entrée.
+error.reset.token=Le mot de passe ne pouvait pas être ajustée. \
+            Peut-être vous avez attendu trop longtemps ou il y avait une erreur \
+            dans l''adresse e-mail que vous avez entrée.
+
+error.answer.count= Le nombre doit être au moins 1.
+error.answer.range= La réponse doit être dans l''intervalle A-{0}.
+error.answer.not.letter= La réponse doit être unse seule majuscule.
+error.question.upload=Une erreur c''est produite lors du téléchargement d''un des fichiers ZIP.
+
+# When successful
+
+success.first = Un premier compte administrateur est créé avec succès.
+success.logout =  Vous avez été déconnecté avec succès
+success.changepass = Votre mot de passe a été changé avec succès.
+success.registration.student = Vous pouvez maintenant vous connecter au système, mais votre professeur \
+        ou enseignant vous devra encore accorder l''accès avant que vous pouviez participer au(x) concours.
+success.registration.teacher = Vous pouvez vous connecter au système dès maintenant.
+
+success.token.sent = Merci. Nous avons envoyé un e-mail à l''adresse indiquée.
+
+# Main page
+caption.logout = Déconnecter
+message.not.logged.in = Pas connecté
+bebras.id = ID Bebras
+
+# data tables
+table.pre.show = Afficher
+table.pre.rows = rangées
+table.post.of = de
+table.post.previous = Précédente
+table.post.next = Suivante
+table.main.empty = Aucun résultat
+
+# Email subject headers
+
+mail.noreply.address = Bebras online <no-reply@bebras.be>
+
+mail.registration.send.token = Enregistrement pour Bebras online
+mail.registration.user.exists = Enregistrement inattendu pour Bebras online
+
+# Contests
+contest.forced.closed = Désolé, mais votre temps était écoulé. L''épreuve est terminée automatiquement.
+contest.forced.just.closed = Nous avons encore registré votre dernière response, mais maintenant nous \
+ devons malheureusement fermer l''épreuve. Votre temps était écoulé.
+
+# Teachers
+warning.no.school =  Avant que vous puissiez effectuer des actions, vous devez d''abord vous enregistrer \
+     comme enseignant d''à moins une école.
+#info.school.added =  L''école à été enregistré. Retournez au page d''acceuil pour enregistrer des classes \
+#   et des élèves (ou restez sur cette page pour vous enregistrer pour une autre école).
+info.school.added = L''école à été enregistré. Veuillez y ajouter des classes et des  élèves.
+error.no.file.uploaded = Vous devez sélectioner un fichier avant que vous poussiez sur le bouton ''Télécharger''.
+
+# spreadsheets
+gender.abbrev.male = M
+gender.abbrev.female = F
+gender.abbrev.null = ?
+
+spreadsheet.invalid.gender = Sexe non valide
+spreadsheet.classcode.empty = La classe ne peut pas être omise
+spreadsheet.name.empty = Le nom ne peut pas être omis
+spreadsheet.firstname.empty = Le prénom ne peut pas être omis
+spreadsheet.gender.empty = Le sexe ne peut pas être omis
+
+spreadsheet.unknown.class = Classe inconue (pour cette école)
+
+spreadsheet.header.info=##Classe,Nom,Prénom,Adresse e-mail,M/F,ID Bebras,Mot de passe
+spreadsheet.header.marks=##Classe,Nom,Prénom,Score,Max
+
+yes = Oui
+no = Non
+yesno.true = Oui
+yesno.false = Non
+
+lcstatus.DELETED = ???
+lcstatus.CAN_BE_OPENED = Peut être ouvert
+lcstatus.BLOCKED = Ne peut pas (déjà) être ouvert
+lcstatus.OPEN = Ouvert
+lcstatus.CLOSED = Fermé
+lcstatus.PENDING = Attendre les résultats
+

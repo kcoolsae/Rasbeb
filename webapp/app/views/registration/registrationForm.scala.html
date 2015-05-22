@@ -1,0 +1,103 @@
+@* registrationForm.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(f: Form[Registration.EmailData])
+
+@* Registration form. Used in start.scala.html and in list.scala.html *@
+
+@nlfren{@* ## DUTCH ## *@
+
+    <h2>Registreer een collega</h2>
+
+    <p>Met het formulier hieronder kan je een collega registreren. Om
+        ongewenste registraties te vermijden (leerlingen die zich voordoen als leraar, bijvoorbeeld), moet je
+        enkele regels in acht nemen:
+    </p>
+    <ul>
+        <li>Registreer enkel collega's die je <b>persoonlijk</b> kent. (Dus niet zomaar iemand
+            die je per e-mail vraagt om hem of haar te registreren.)</li>
+        <li>Vul in het formulier enkel een <b>e-mailadres</b> in waarvan je zeker weet dat het door
+            je collega <b>werkelijk</b> wordt gebruikt (en niet één dat door een leerling twee minuten geleden is
+            aangemaakt op gmail, bijvoorbeeld.)</li>
+        <li>Je collega zal moeten inloggen met het e-mailadres dat je hier opgeeft.</li>
+    </ul>
+    <p>Na registratie zal je collega een mail ontvangen met verdere instructies.</p>
+
+    @form(action = routes.Registration.sendToken()) {
+      @inputText(f("email"), '_label -> "Email-adres")
+      @submitButton("Stuur de registratie-email")
+    }
+}{ @* ## FRENCH ## *@
+
+<h2>Enregistrer un collègue</h2>
+
+<p>Avec le formulaire ci-dessous vous pouvez enregistrer un collègue. Pour éviter les inscriptions
+    indésirables (étudiants se présentant comme enseignants, par exemple), il faut respecter quelques règles:</p>
+        <ul>
+            <li>Inscrivez seulement des collègues que vous connaissez personnellement.
+                (Donc pas quelqu'un inconnu qui vous a envoyé un e-mail vous demandant de l'inscrire.)
+            </li>
+            <li> Utilisez une adresse e-mail dont vous savez qu'elle est effectivement utilisée par
+                votre collègue (et non pas une qui est créée sur gmail, par un étudiant, il y a deux minutes).
+            </li>
+            <li>
+                Votre collègue devra se connecter avec l'adresse e-mail que vous indiquez ici.
+            </li>
+        </ul>
+     <p>Après l'enregistrement votre collègue recevra un e-mail avec des instructions supplémentaires</p>
+
+
+    @form(action = routes.Registration.sendToken()) {
+      @inputText(f("email"), '_label -> "Adresse e-mail")
+      @submitButton("Envoyer le mail d'inscription")
+    }
+}{ @* ## ENGLISH ## *@
+
+<h2>Register a colleague</h2>
+
+<p>With the form below you can register a colleague. To avoid unwanted registrations (students posing as teachers, for example),
+    you must observe a few rules:</p>
+<ul><li>Only register colleagues that you know <b>personally</b>. (Not just someone sending you a mail asking
+    you to register them.)</li>
+<li>Fill in a e-mail address that is actually used by your colleague (and not one that was freshly created on
+    gmail by a student two minutes ago, for example).</li>
+<li>Your colleague will have to log in with the email address that you specify here.</li>
+    </ul>
+<p>
+After registration your colleague will receive an email with further instructions.
+</p>
+
+    @form(action = routes.Registration.sendToken()) {
+      @inputText(f("email"), '_label -> "Email address")
+      @submitButton("Send the registration email")
+    }
+}
+

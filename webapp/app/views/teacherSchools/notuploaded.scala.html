@@ -1,0 +1,97 @@
+@* notuploaded.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(list: Iterable[util.excel.StudentInClassOrError], ts: TeacherSchool)
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+<style>
+    tbody th { text-align: right; }
+    #uploadForm { margin-bottom: 15px; }
+</style>
+}
+@user("ANU", stylesheets = stylesheets) {
+
+<div class="alert alert-danger">
+    <ul><li>
+    @nlfren{Het bestand dat je hebt doorgestuurd, bevat enkele fouten - zie hieronder. Gelieve deze
+    fouten te corrigeren vooraleer je het opnieuw probeert te uploaden.
+    }{Le fichier que vous avez essayé de charger contient des erreurs - comme indiqué ci-dessous.
+    Veuillez corriger ces erreurs avant d'essayer un nouveau téléchargement.
+    }{The spreadsheet file which you tried to upload contains errors, as listed below. Please correct these
+    errors before attempting a new upload.}
+    </li></ul>
+</div>
+
+@* Factor out common code with homeTeacher *@
+
+
+<h2>@ts.getSchoolName</h2>
+
+<div id="uploadForm">
+<form action="@routes.TeacherSchools.uploadStudents(ts.getId)" method="POST"
+                         enctype="multipart/form-data">
+     <input type="file" name="students"/>
+     <button>@nlfren{Upload}{Télécharger}{Upload}</button>
+</form>
+</div>
+
+<div class="table_wrapper">
+    <table>
+        <thead>
+           <tr>
+               <th></th>
+               <th>@nlfren{Klas}{Classe}{Class}</th>
+               <th>@nlfren{Naam}{Nom}{Name}</th>
+               <th>@nlfren{Voornaam}{Prénom}{First name}</th>
+               <th>@nlfren{Emailadres}{Adresse email}{Email address}</th>
+               <th></th>
+               @* TODO <th>@nlfren{Bebras ID}{ID Bebras}{Bebras ID}</th> *@
+               <th>@nlfren{Foutberichten}{Messages d'erreur}{Error messages}</th>
+           </tr>
+        </thead>
+        <tbody>
+        @foreach.tr(list){ data =>
+            <th>@data.getRowNumber</th>
+            <td>@data.getClassCode</td>
+            <td>@data.getName</td>
+            <td>@data.getFirstName</td>
+            <td>@data.getEmail</td>
+            <td>@Messages(data.getGenderKey)</td>
+            @* TODO <td>@data.getBebrasId</td> *@
+            <td class="text-danger">@Messages(data.getErrorCode)</td>
+        }
+        </tbody>
+        <tfoot><tr><th colspan="10"></th></tr></tfoot>
+    </table>
+</div>
+
+}

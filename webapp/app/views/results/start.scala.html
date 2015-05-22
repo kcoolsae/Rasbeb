@@ -1,0 +1,123 @@
+@* start.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(f: Form[Scores.Data], contestLevels : Iterable[TeacherContests.ContestLevel], infos: Iterable[TeacherSchoolClassDAO.TeacherSchoolInfo], map: Map[String,List[ParticipationDAO.StudentMarks]])
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+}
+
+@user("BST",stylesheets=stylesheets){
+
+<h2>@nlfren{Resultaten}{Résultats}{Results}</h2>
+
+<p>@nlfren{Kies een wedstrijd en de school waarvoor u de resultaten wilt zien. (Leerlingen kunnen hun individuele resultaten zien
+nadat ze zijn ingelogd.)  Je kan ook een Excel-bestand downloaden met dezelfde gegevens.
+}{Choisissez un concours et une école pour lesquels vous souhaitez voir les résultats. (Les élèves peuvent voir leurs résultats individuels
+après qu'ils sont connectés.) Vous pouvez aussi télécharger un fichier Excel
+       avec les mêmes données.
+}{Choose a contest and school for which you want to see the results. (Pupils can see their individual results
+after they are logged in.) You can also download an Excel file with the same data.
+}</p>
+
+@form(action=routes.Scores.show){
+
+@defining(f("contest")){ field =>
+<tr>
+    <td class="label">
+     <label for="@field.id">@nlfren{Niveau - wedstrijd}{Niveau - concours}{Level - contest}
+     </label>
+    </td>
+    <td>
+        <select name="@field.name" id="@field.id">
+            @foreach(contestLevels){ cl =>
+                @option(field.value,cl.contestId+":"+cl.levelId){
+                    @cl.levelName - @cl.title
+                }
+            }
+        </select>
+    </td>
+</tr>
+}
+
+@nlfren{@teacherContests.selectSchool(f("schoolId"), "School", infos)
+}{@teacherContests.selectSchool(f("schoolId"), "École", infos)
+}{@teacherContests.selectSchool(f("schoolId"), "School", infos)
+}
+<tr>
+    <td></td>
+    <td>
+@nlfren{
+    <button name="action" value="display">Toon de resultaten</button>
+    <button name="action" value="download">Download een Excel-bestand</button>
+}{
+    <button name="action" value="display">Montrer les résultats</button>
+    <button name="action" value="download">Télécharger un fichier Excek</button>
+}{
+    <button name="action" value="display">Display results</button>
+    <button name="action" value="download">Download Excel file</button>
+}
+    </td>
+</tr>
+}
+
+<p class="footnote">
+@*       @nlfren{Moeilijkheidsgraden:}{Niveaux de difficulté:}{Levels of difficulty:} *@
+       @foreach(db.DataAccess.getLevels){ lvl =>
+           <b>@lvl.getName:</b> @lvl.getDescription
+       }
+</p>
+
+@if(map != null) {
+    @if(map.keySet.isEmpty) {
+        <h2>@Messages("table.main.empty")</h2>
+    }else{
+        @foreach(map.keySet) { key =>
+            <h2>@key</h2>
+            <div class="data_table">
+                <table>
+                    <thead>
+                         <tr><th>@nlfren{Naam}{Nom}{Name}</th><th>@nlfren{Score}{Score}{Marks}</th></tr>
+                    </thead>
+                    <tbody>
+                    @foreach.trOrElse(map.get(key)) { m =>
+                       <td>@m.name</td><td>@m.totalMarks / @m.maximumMarks</td>
+                    }{
+                        <tr><td class="dataTables_empty" colspan="10">@Messages("table.main.empty")</td></tr>   @* TODO: make into snippet *@
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+}
+
+}

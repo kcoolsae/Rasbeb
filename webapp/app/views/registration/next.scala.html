@@ -1,0 +1,88 @@
+@* next.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(f: Form[Authentication.UserData], token: String)
+
+@anonymous("RGC") {
+
+    @globalErrors(f)
+
+@nlfren{
+    <h2>Registreren bij Bebras online</h2>
+        @* TODO: multilanguage *@
+
+    <p>Om je registratie te vervolledigen moet je een wachtwoord kiezen en je naam
+    opgeven. Daarna zal je kunnen inloggen in het systeem. (Alle velden moeten worden ingevuld.)</p>
+
+    @form(action = routes.Registration.createTeacher(token)) {
+        @inputText(field = f("email"), '_label -> "E-mailadres")
+        <tr><td></td></td><td colspan="3">(Gebruik hetzelfde e-mail-adres als waarop je de <br/>registratie-email hebt ontvangen.)</td></tr>
+        @inputPassword(field = f("password"), '_label -> "Nieuw wachtwoord" )
+        @inputPassword(field = f("repeated"), '_label -> "(nogmaals)" )
+
+        @inputText(field = f("name"), '_label -> "Naam, Voornaam (bijv. Janssens, Marie)")
+        @submitButton("Registreren")
+    }
+}{
+    <h2>Inscrivez-vous au plate-forme Bebras online</h2>
+
+        <p>Pour compléter votre inscription, vous devez choisir un mot de passe et préciser votre nom.
+        Après cela, vous pourrez vous connecter au système. (Tous les zones sont obligatoires.)</p>
+
+    @form(action = routes.Registration.createTeacher(token)) {
+        @inputText(field = f("email"), '_label -> "Adresse email")
+        <tr><td></td></td><td colspan="3">(Utilisez l'adresse à laquelle l'email <br/> d'inscription a été envoyé)</td></tr>
+        @inputPassword(field = f("password"), '_label -> "Nouveau mot de passe" )
+        @inputPassword(field = f("repeated"), '_label -> "(répéter)" )
+
+        @inputText(field = f("name"), '_label -> "Nom, Prénom (par exemple: Dubois, Martine)")
+        @submitButton("Enregistrer")
+    }
+
+}{
+    <h2>Register with Bebras online</h2>
+
+    <p>To complete your registration you need to choose a password and tell us your name. After that
+    you will be able to login into the system. (All fields need to be filled in.)</p>
+
+    @form(action = routes.Registration.createTeacher(token)) {
+        @inputText(field = f("email"), '_label -> "Email address")
+        <tr><td></td></td><td colspan="3">(Use the email address to which the<br/>registration email was sent)</td></tr>
+        @inputPassword(field = f("password"), '_label -> "New password" )
+        @inputPassword(field = f("repeated"), '_label -> "(again)" )
+
+        @inputText(field = f("name"), '_label -> "Name, First name (e.g. Doe, John)")
+        @submitButton("Register")
+    }
+
+}
+
+}

@@ -1,0 +1,79 @@
+@* acknowledge.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(secondsLeft: Int, totalSeconds: Int)
+
+@* Let the user acknowledge that he really wants to stop *@
+
+@stylesheets={
+   <link href='@routes.Assets.at("css/contest.css")' rel='stylesheet' type='text/css'/>
+}
+
+@scripts={
+   <script src='@routes.Assets.at("javascripts/jquery-1.8.3.min.js")' language="JavaScript"></script>
+   <script src='@routes.Assets.at("javascripts/countdown-clock.js")' language="JavaScript"></script>
+}
+
+@page("TAC",stylesheets=stylesheets,scripts=scripts){
+<div id='banner_clock'>00:00</div>
+   <div id='banner_title'>
+       <h1>@nlfren{Ben je echt klaar?}{Avez-vous vraiment fini?}{Are you really finished?}</h1>
+   </div>
+}{
+@nlfren{
+<p>Klik op de linker knop hieronder om te bevestigen dat je wel degelijk klaar bent met de wedstrijd.
+Dit is onherroepelijk en kan niet meer ongedaan worden gemaakt.</p>
+        <p>Wil je toch je antwoorden nog eens opnieuw bekijken, klik dan op de rechterknop. </p>
+}{
+<p>Cliquez sur le bouton ci-dessous à gauche pour confirmer que vous voulez bien terminer l'épreuve.
+Ceci est irrévocable et ne peut être annulé.</p>
+<p>Si vous voulez relire et vérifier vos réponses une fois de plus, cliquez sur le bouton à droite.</p>
+}{
+<p>Click the left button below to confirm that you are indeed finished with the questions.
+This is irrevocable and can not be undone.</p>
+<p>If you instead want to review your answers once more, then click the right button.</p>
+}
+
+<div class="centered">
+   @buttonForm(action=routes.Participations.finished()){
+      @nlfren{Ja, ik ben echt klaar}{Oui, j'ai vraiment fini}{Yes, I am really finished}
+   }
+   @buttonForm(action=routes.Participations.showQuestion(1)){
+    @nlfren{Nee, ik keer terug naar de wedstrijd}{Non, je retourne à l'épreuve}{No, I'll go back to the questions}
+   }
+</div>
+
+<script>
+        $( function() {
+            countdown_clock ($('#banner_clock'), @secondsLeft, @totalSeconds)
+        } )
+</script>
+}

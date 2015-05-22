@@ -1,0 +1,306 @@
+/* main.css
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+/*
+ * CSS for most pages.
+ *
+ * Style based on that of the bebras website. Naming conventions based on bootstrap.
+ */
+
+/**
+ * General
+ */
+
+body {
+    background-color: #DCDCDC;
+    color: black;
+    font-family: 'Fanwood Text',serif;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+}
+
+img { /* IE8 IE7 */
+    border : 0px;
+}
+
+a {
+    color : #52679C;
+    text-decoration : none;
+    font-weight : bold;
+}
+
+a:visited {
+    color : #52679C;
+    text-decoration : none;
+}
+
+a:hover {
+    color : grey;
+    text-decoration : none;
+}
+
+h2 {
+    color : #52679C;
+    font-weight : bold;
+}
+
+h3 {
+    color : #52679C;
+    font-weight : normal;
+}
+
+/* PAGE STRUCTURE - GENERAL
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * general_wrapper
+ *    header
+ *    content
+ *      menu
+ *      subcontent
+ *    footer
+ */
+
+#general_wrapper {
+    width : 1080px;
+    margin : auto;
+    padding : 0px;
+}
+
+#header {
+  background-image: url("../images/header.png");
+  float: left;
+  font-size: 52px;
+  font-weight: bold;
+  height: 110px;
+  margin-left: 40px;
+  padding-left: 100px;
+  padding-top: 40px;
+  text-align: left;
+  width: 900px;
+}
+
+#content {
+    width: 1000px;
+    float : left;
+    margin-left : 40px;
+    height : auto;
+    margin-bottom : 0px;
+    padding-bottom : 60px;
+    margin-top : 0px;
+    background-color : white;
+}
+
+#footer {
+    width : 1000px;
+    float : left;
+    margin-left : 40px;
+    margin-top : 0px;
+    height : 150px;
+    background-image : url('../images/footer.png');
+}
+
+#menu {
+    width : 800px;
+    margin : auto;
+    height : 30px;
+    border-top : 1px solid silver;
+    border-bottom : 1px solid silver;
+    font-family: 'Overlock', cursive;
+}
+
+#subcontent {
+    font-size : 18px;
+    width : 700px;
+    margin : auto;
+    text-align : left;
+    padding-top : 30px;
+}
+
+/* PAGE STRUCTURE - FOOTER
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * footer
+ *    footer_content
+ *      footer_left_block
+ *      footer_center_block
+ *      footer_right_block
+ */
+#footer_content {
+    width : 800px;
+    border-top : 1px solid silver;
+    margin: auto;
+    font-size : 10px;
+    font-family : Verdana;
+    display: table;
+}
+
+#footer_left_block {
+    width : 30%;
+    padding-top : 30px;
+    display: table-cell;
+    text-align: left;
+}
+#footer_center_block {
+    width : 40%;
+    padding-top : 30px;
+    text-align: center;
+    display: table-cell;
+}
+#footer_right_block {
+    width : 30%;
+    text-align: right;
+    display: table-cell;
+}
+
+#footer_content a {
+    text-decoration : none;
+    font-weight : normal;
+    color : black;
+}
+#footer_content a:hover {
+    color : grey;
+}
+
+#footer_content form {
+    display: inline;
+}
+
+#footer_content form input {
+    font-size: inherit;
+}
+
+/* PAGE STRUCTURE - MENU
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * menu
+ * contains menu_item and menu_selected
+ *
+ * TODO: twitter bootstrap conventions
+ */
+
+.menu_item {
+    padding-top : 5px;
+    width : 150px;
+    float : left;
+    font-size : 18px;
+    font-weight : bold;
+}
+
+.menu_selected {
+    padding-top : 5px;
+    width : 150px;
+    float : left;
+    font-size : 18px;
+    font-weight : bold;
+}
+
+.menu_selected a {
+    text-decoration : none;
+    color : #52679C;
+}
+
+.menu_item a {
+    text-decoration : none;
+    color : black;
+}
+
+.menu_item a:hover {
+    color : grey;
+}
+
+/* ALERTS
+ * ~~~~~~~~~
+ */
+
+.text-danger {
+    color: #b94a48;
+}
+
+.text-success {
+    color: #468847;
+}
+
+.alert {
+    background-color: #FCF8E3;
+    border: 1px solid #FBEED5;
+    border-radius: 4px 4px 4px 4px;
+    color: #C09853;
+    margin-bottom: 20px;
+    padding: 15px 35px 15px 15px;
+}
+
+.alert-danger {
+    background-color: #F2DEDE;
+    border-color: #EED3D7;
+    color: #B94A48;
+}
+
+.alert-success {
+    background-color: #DFF0D8;
+    border-color: #D6E9C6;
+    color: #468847;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+/**
+ * Buttons
+ */
+button {
+   font-family: sans-serif;
+   background-color: #ffffff;
+   border-radius: 4px;
+   border: 1px solid #ccc;
+   box-shadow: none;
+   color: #333;
+   cursor: pointer;
+   font-weight: bold;
+}
+
+button:hover {
+   background-color: #ebebeb;
+   border-color: #adadad;
+}
+
+#subcontent button {
+   font-size: 12px;
+}
+
+#footer button {
+   font-size: 10px;
+}
+
+/* SPECIALS
+ * ~~~~~~~~~~~~~~~
+ */
+
+.centered_buttons {
+    text-align: center; 
+}
+
+.centered_buttons form {
+    display: inline;
+}
+
+.small_buttons {
+    text-align: right;
+}
+
+.details_cell {
+    width: 100%;
+}
+
+.search_button {
+   background-image: url("../images/search.png");
+   background-repeat: no-repeat;
+   background-position: center center;
+   width:28px;
+   height:24px;
+}
+
+.sub-table {
+   margin-left: 30px;
+}
+

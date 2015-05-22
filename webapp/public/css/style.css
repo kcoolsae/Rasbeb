@@ -1,0 +1,175 @@
+/* style.css
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+/* General
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+body {
+    background-color: #dcdcdc;
+    font-family: Verdana, Arial, sans-serif;
+    text-align: left;
+}
+
+img { /* IE8 IE7 */
+    border : 0px;
+}
+
+h2 {
+    color : #52679C;
+    font-weight : bold;
+}
+
+h3 {
+    color : #52679C;
+    font-weight : normal;
+}
+
+
+a {
+    color : #52679C;
+    text-decoration : none;
+}
+
+a:visited {
+    color : #52679C;
+    text-decoration : none;
+}
+
+a:hover {
+    color : grey;
+    text-decoration : none;
+}
+
+
+ /* ALERTS
+  * ~~~~~~~~~
+  */
+
+ .text-danger {
+     color: #b94a48;
+ }
+
+ .text-success {
+     color: #468847;
+ }
+
+ .alert {
+     background-color: #FCF8E3;
+     border: 1px solid #FBEED5;
+     border-radius: 4px 4px 4px 4px;
+     color: #C09853;
+     margin-bottom: 20px;
+     padding: 15px 35px 15px 15px;
+ }
+
+ .alert-danger {
+     background-color: #F2DEDE;
+     border-color: #EED3D7;
+     color: #B94A48;
+ }
+
+ .alert-warning {
+    background-color: #FCF8E3;
+    border-color: #FBEED5;
+    color: #C09853;
+ }
+
+ .alert-success {
+     background-color: #DFF0D8;
+     border-color: #D6E9C6;
+     color: #468847;
+ }
+
+ .alert ul {
+     margin: 0;
+     padding-left: 20px;
+ }
+
+ /* FORMS
+  * ~~~~~
+  */
+
+ table.form {
+    border-size: 0;
+    borders-collapse: collapse;
+ }
+
+ table.form td {
+     padding: 0px 10px;
+ }
+
+ table.form td.label {
+     min-width: 100px;
+     text-align: right;
+ }
+
+ table.form td.subtitle {
+     padding: 15px 10px 10px 10px;
+     font-weight : bold;
+ }
+
+/* BUTTONS
+ * ~~~~~~~
+ */
+
+a.like_button {
+   display: inline-block;
+}
+
+a.like_button, button {
+   font-family: sans-serif;
+   background-color: #ffffff;
+   border-radius: 4px;
+   border: 1px solid #ccc;
+   box-shadow: none;
+   color: #333;
+   cursor: pointer;
+   font-weight: bold;
+}
+
+
+a.like_button:hover, button:hover {
+   background-color: #ebebeb;
+   border-color: #adadad;
+}
+
+/* EXTRAS
+ * ~~~~~~
+ */
+
+div.todo {
+    /* border: 1px dashed orange; */
+    padding: 0px 10px;
+    color: orange;
+    background-color: papayawhip;
+}
+
+.centered {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.centered form {
+    display: inline;
+    padding: 5px;
+}
+
+span.todo {
+    color: orange;
+}
+
+.footnote {
+    color: grey;
+    font-size: smaller;
+}
+
+div.subtitle{
+    color: #52679C;
+    margin-bottom: 30px;
+    margin-top: -15px;
+}

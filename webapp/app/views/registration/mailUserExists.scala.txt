@@ -1,0 +1,91 @@
+@* mailUserExists.scala.txt
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(ip : String)
+@nlfren{Beste gebruiker,
+
+Met deze mail laten we je weten dat we een aanvraag tot registratie hebben ontvangen
+op jouw email-adres voor *Bebras online*. Dit is een beetje eigenaardig omdat
+je reeds eerder als gebruiker bent geregistreerd.
+
+Misschien heb je aan meerdere collega's tegelijk gevraagd je te registeren?
+
+Voor de Bebras online wedstrijdapplicatie maakt dit weinig uit - je kan deze mail
+dus gerust negeren. Ter informatie geven we je het IP-adres van de computer
+die bij de registratie werd gebruikt:
+
+@ip
+
+Maar een IP-adres is gemakkelijk te vervalsen...
+
+Met vriendelijke groeten,
+
+Bebras online
+}{
+Cher utilisateur,
+
+Avec cet email nous vous informerons que nous avons reçu une demande d'enregistrement
+pour *Bebras online* sur votre adresse email. C'est un peu bizarre parce que
+vous êtes déjà enregistré comme utilisateur auparavant.
+
+Peut-être vous avez demandé  en même temps à plusieurs collègues de vous inscrire?
+
+Pour la plate-forme Bebras online ça ne fait peu de différence - vous pouvez
+donc ignorer ce message en toute sécurité. Pour votre information, nous vous donnons
+l'adresse IP de l'ordinateur qui a été utilisée pour l'enregistrement:
+
+@ip
+
+Mais une adresse IP est facile à contrefaire ...
+
+Cordialement,
+
+Bebras online
+}{Dear user,
+
+With this mail we inform you that we have received a request to register your email
+address with *Bebras online* This is a bit peculiar because you were already registered as a
+user before.
+
+Maybe you asked more than one colleague to register you?
+
+For the Bebras online system this makes little difference - you can therefore
+safely ignore this information. For your information, we give you the IP address
+of the computer that was used for the registration request:
+
+@ip
+
+But an IP address is easily forged ...
+
+Best regards,
+
+Bebras online
+}

@@ -1,0 +1,83 @@
+@* students.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(map: Map[String, List[Student]], school: School)
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+}
+@user("EPC", stylesheets = stylesheets) {
+   <h2>@school.getName</h2>
+   @nlfren{
+   <p>Hieronder hebben we alle leerlingen afgedrukt voor alle klassen uit deze school. Je kan ook
+       een <a href="@routes.TeacherSchools.downloadStudents(school.getId)">Excel-bestand downloaden</a> met dezelfde gegevens.</p>
+   <p>Keer terug naar de welkomstpagina om een andere school te kiezen.</p>
+   }{
+   <p>En dessous sont affichés tous les étudiants de toutes les classes de cette école. Vous pouvez aussi <a href="@routes.TeacherSchools.downloadStudents(school.getId)">télécharger un fichier Excel</a>
+       avec les mêmes données.</p>
+   <p>Pour choisir une autre école, veuillez retourner à la page d'acceuil.</p>
+   }{
+   <p>Below we have listed all pupils for all classes of this school. You can also download an <a href="@routes.TeacherSchools.downloadStudents(school.getId)">Excel file</a>
+       with the same data.</p>
+   <p>To choose another school, please return to the home page.</p>
+   }
+
+   @foreach(map.keySet){ key =>
+
+    <a name="@key"></a><h3>@nlfren{Klas:}{Classe:}{Class:} @key</h3>
+
+    <div class="table_wrapper">
+        <table>
+            <thead>
+               <tr>
+                   <th>@nlfren{Naam}{Nom}{Name}</th>
+                   <th>@nlfren{Bebras ID}{ID Bebras}{Bebras ID}</th>
+                   <th>@nlfren{Wachtwoord}{Mot de passe}{Password}</th>
+                   <th></th>
+                   <th>@nlfren{Emailadres}{Adresse email}{Email address}</th>
+               </tr>
+            </thead>
+            <tbody>
+            @foreach.trOrElse(map.get(key)){ st =>
+                <td>@st.getName</td>
+                <td>@st.getBebrasId</td>
+                <td>@st.getInitialPassword</td>
+                <td>@Messages(if(st.isMale)"gender.abbrev.male" else "gender.abbrev.female")</td>
+                <td>@st.getEmail</td>
+            }{
+            <tr><td class="dataTables_empty" colspan="10">@Messages("table.main.empty")</td></tr>
+            }
+            </tbody>
+            <tfoot><tr><th colspan="10"></th></tr></tfoot>
+        </table>
+    </div>
+    }
+}

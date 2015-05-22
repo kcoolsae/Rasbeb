@@ -1,0 +1,94 @@
+# messages.en
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Copyright (C) 2015 Universiteit Gent
+#
+# This file is part of the Rasbeb project, an interactive web
+# application for Bebras competitions.
+#
+# Corresponding author:
+#
+# Kris Coolsaet
+# Department of Applied Mathematics, Computer Science and Statistics
+# Ghent University
+# Krijgslaan 281-S9
+# B-9000 GENT Belgium
+#
+# The Rasbeb Web Application is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# The Rasbeb Web Application is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with the Degage Web Application (file LICENSE in the
+# distribution).  If not, see <http://www.gnu.org/licenses/>.
+
+# Main page
+caption.logout = Log out
+message.not.logged.in = Not logged in
+bebras.id = Bebras ID
+
+# data tables
+table.pre.show = Show
+table.pre.rows = rows
+table.post.of = of
+table.post.previous = Previous
+table.post.next = Next
+table.main.empty = No results
+
+# Email subject headers
+
+mail.noreply.address = Bebras online <no-reply@bebras.be>
+
+mail.registration.send.token = Registration for Bebras online
+mail.registration.user.exists = Unexpected registration for Bebras online
+
+# Contests
+contest.forced.closed = Sorry, but your time was up. The test has been terminated automatically.
+contest.forced.just.closed = Your last answer was registered just in time, but unfortunately we need to close \
+ the test now - your time was up.
+
+# Teachers
+warning.no.school =  Before you can perform any actions, you must first register yourself as \
+      a teacher for at least one school.
+
+# spreadsheets
+gender.abbrev.male = M
+gender.abbrev.female = F
+gender.abbrev.nul = ?
+
+spreadsheet.invalid.gender = Invalid gender
+spreadsheet.classcode.empty = A class code is required
+spreadsheet.name.empty = Name should not be empty
+spreadsheet.firstname.empty = First name should not be empty
+spreadsheet.gender.empty = Gender is required
+
+spreadsheet.unknown.class = Unknown class (for this school)
+
+spreadsheet.header.info=##Class,Name,First name,Email address,M/F,Bebras ID,Password
+spreadsheet.header.marks=##Class,Name,First name,Score,Max
+
+# Teachers
+warning.no.school =  Before you can perform any actions you need to register yourself as responsible \
+                     for at least one school
+info.school.added =  The school has been registered.  Please add classes and pupils.
+#info.school.added =  The school has been registered.  Return to the home page to register classes and pupils \
+#                     with this school (or stay on this page and register yourself for another school).
+error.no.file.uploaded = You must select a file before you press the ''Upload'' button.
+
+
+yes = Yes
+no = No
+yesno.true = Yes
+yesno.false = No
+
+lcstatus.DELETED = ???
+lcstatus.CAN_BE_OPENED = Can be opened
+lcstatus.BLOCKED = Cannot (yet) be opened
+lcstatus.OPEN = Open
+lcstatus.CLOSED = Closed
+lcstatus.PENDING = Wait for results

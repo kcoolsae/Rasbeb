@@ -1,0 +1,122 @@
+@* homeStudent.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(available: Iterable[LocalContest])
+
+@* Landing page for students *@
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+}
+
+@status(lc: LocalContest)={
+   @lc.getStatus match {
+       case LCStatus.CAN_BE_OPENED | LCStatus.BLOCKED => {
+          @nlfren{Nog niet open}{Pas encore ouvert}{Not yet open}
+       }
+       case LCStatus.OPEN => {
+          @if(lc.isTaken) {
+            @nlfren{Resultaten nog niet beschikbaar}{Résultats pas encore disponible}{Results not yet available}
+          } else {
+            <a href="@routes.Participations.showLocalStart(lc.getId)">@nlfren{Deelnemen}{Participer}{Participate}</a>
+          }
+       }
+       case LCStatus.CLOSED => {
+          @if(lc.isTaken) {
+              <a href="@routes.Participations.showOverview(lc.getId)">@nlfren{Resultaten}{Résultats}{Results}</a>
+          } else {
+            @nlfren{Reeds afgesloten}{Déjà fermé}{Already closed}
+          }
+       }
+       case LCStatus.PENDING => {
+          @if(lc.isTaken) {
+            @nlfren{Resultaten nog niet beschikbaar}{Résultats pas encore disponible}{Results not yet available}
+          } else {
+              @nlfren{Reeds afgesloten}{Déjà fermé}{Already closed}
+          }
+       }
+       case _ => {
+          ???
+       }
+   }
+}
+
+
+@user("WST", stylesheets = stylesheets) {
+
+<h2>@nlfren{Welkom bij Bebras online}{Bienvenu chez Bebras online}{Welcome to Bebras online}</h2>
+
+@if(available.iterator.hasNext) {
+    @nlfren{<p>Hieronder vind je een lijst van alle wedstrijden waarvoor je leraar je heeft ingeschreven. Klik op
+    'deelnemen' om aan de wedstrijd deel te nemen.</p>
+    <p>Nadat je aan de wedstrijd hebt meegedaan, zal je even moeten wachten
+    op de resutaten (voor de internationale wedstrijden kan dat wel meer dan een week duren). Daarna kan je
+        gewoon op 'resultaten' klikken. </p>
+    }{<p>Ci-dessous vous trouverez une liste de tous les concours pour lesquels votre enseignant
+    vous a enregistrés. Cliquez sur le lien 'participer' pour lancer un concours.</p>
+    <p>Une fois que vous avez terminé, il faudra attendre un peu avant que vous puissiez voir
+        votre résultats (pour les concours internationaux, cela peut prendre plus d'une semaine).
+        Ensuite, il suffit de cliquer sur 'résultats' pour les voir.</p>
+    }{<p>Below you will find a list of all contests for which your teacher has registered you. Click
+    the 'participate' link to start a contest.</p>
+      <p>After you have finished a contest you will have to wait a little before you can see your
+      results (for international contests this may take a week). Afterwards, just click
+          on 'results'.</p>
+    }
+<div class="table_wrapper">
+    <table>
+        <thead>
+            <th>@nlfren{Titel}{Titre}{Title}</th>
+            <th>@nlfren{Beschrijving}{Description}{Description}</th>
+            <th>@nlfren{Niveau}{Niveau}{Level}</th>
+            <th>@nlfren{Status}{État}{State}</th>
+        </thead>
+        <tbody>
+        @foreach.tr(available){ lc =>
+               <td>@lc.getTitle</td>
+               <td>@lc.getComment</td>
+               <td>@lc.getLevel</td>
+               <td>@status(lc)</td>
+        }
+        </tbody>
+        <tfoot><tr><th colspan="10"></th></tr></tfoot>
+    </table>
+</div>
+
+} else {
+    @nlfren{<p>Voorlopig heeft je leraar je nog bij geen enkele wedstrijd ingeschreven.</p>
+    }{<p>Pour le moment votre enseignant ne vous a encore enregistré pour aucun concours.</p>
+    }{<p>At the moment your teacher has not yet registered you with any contest.</p>
+    }
+}
+
+
+}

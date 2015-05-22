@@ -1,0 +1,144 @@
+@* homeTeacher.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(list : Iterable[TeacherSchoolClassDAO.TeacherSchoolInfo])
+
+@* Landing page for teachers *@
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+<style>
+    table.subdiv {
+        border-collapse: separate;
+        border-spacing: 3px;
+        padding-left: -3px;
+    }
+
+    table.subdiv td {
+        background-color: #f2f2f2;
+        padding: 10px;
+    }
+
+    table.subdiv td b {
+        color: #333;
+    }
+</style>
+}
+
+@user("WTE", stylesheets=stylesheets) {
+
+   @nlfren{<h3>Algemeen:</h3>
+        <ul>
+            <li><a href="@routes.TeacherSchools.showWithDefaults">Voeg een school toe</a></li>
+            <li><a href="@routes.Registration.start">Registreer een collega</a></li>
+        </ul>
+        Andere opties zijn hieronder gegroepeerd per school.
+   }{<h3>Actions generales:</h3>
+        <ul>
+            <li><a href="@routes.TeacherSchools.showWithDefaults">Ajouter une école</a></li>
+            <li><a href="@routes.Registration.start">Enregistrer un collègue</a></li>
+        </ul>
+        Autres options sont groupées par école ci-dessous.
+   }{<h3>General actions</h3>
+        <ul>
+            <li><a href="@routes.TeacherSchools.showWithDefaults">Add a school</a></li>
+            <li><a href="@routes.Registration.start">Register a colleague</a></li>
+        </ul>
+        Other options are grouped by school below.
+   }
+
+   @foreach(list){ ts =>
+       <h3>@ts.name</h3>
+       <table class="subdiv">
+           <tbody>
+           <tr>
+               <td width="55%">
+                   @nlfren{<b>Klassen geregistreerd voor deze school.</b><br/>
+                   Klik op een klas voor een lijst van zijn leerlingen.
+                   }{<b>Classes actuellement enregistrées pour cette école.</b><br/>
+                   Cliquez sur une classe pour voir la liste de ses étudiants.
+                   }{<b>Classes currently registered for this school.</b><br/>
+                   Click on a class for a list of its students.
+                   }
+               </td>
+               <td>
+                   @if(ts.classList.isEmpty) {
+                     @nlfren{(nog geen ingevoerd)}{(aucunes pour l'instant)}{(none yet)}
+                   } else {
+                     @foreach(ts.classList){ cl =>
+                         <a href="@routes.TeacherSchools.showStudents(cl.getSchoolId)#@cl.getName">@cl.getName</a>
+                     }
+                   }
+               </td>
+           </tr>
+           <tr>
+               <td>@nlfren{<b>Klassen toevoegen.</b><br/>
+                   Je kan meerdere klassen tegelijk toevoegen door hun codes te scheiden met komma's.
+                   (Gebruik liefst <i>korte</i> codes, zoals 3a, 4a-econ, ...)
+                   }{<b>Ajouter des classes.</b><br/>
+               Vous pouvez ajouter plusieurs classes à la fois
+               en séparant leurs codes avec des virgules. (Veuillez utiliser des codes <i>courts</i> - comme 3a, 4a-écon, ...)}{
+                   <b>Add classes.</b><br/>
+                   You can add more than one class at the time
+                   by separating their codes with comma's. (Please use <i>short</i> codes, like 3a, 4a-econ, ...)
+                   }
+               </td>
+               <td>
+                   <form action="@routes.TeacherSchools.addClasses(ts.schoolId)" method="post">
+                       <input type='text' name="list"/><br/> <button>@nlfren{Toevoegen}{Ajouter}{Add}</button>
+                   </form>
+               </td>
+           </tr>
+           <tr>
+               <td>@nlfren{<b>Registreer leerlingen voor deze school</b> door een Excel-werkblad
+                   op te laden.
+                   }{<b>Enregistrez des élèves pour cette école</b>
+                   en téléchargeant un fichier Excel.
+                   }{<b>Register students for this school</b>
+                   by uploading an Excel spreadsheet.
+                   } <a href='@routes.Assets.at(lang.code + "/registerStudents.html")' target="help"><img src='@routes.Assets.at("images/info.png")'/> </a>
+               </td>
+               <td>
+                   <form action="@routes.TeacherSchools.uploadStudents(ts.teacherSchoolId)" method="POST"
+                         enctype="multipart/form-data">
+                       <input type="file" name="students"/>
+                       <button>@nlfren{Upload}{Télécharger}{Upload}</button>
+                   </form>
+               </td>
+           </tr>
+           <tr>
+               <td>@teacherSchools.downloadLink(ts.schoolId)</td>
+           </tr>
+           </tbody>
+       </table>
+   }
+
+}

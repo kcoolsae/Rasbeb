@@ -1,0 +1,86 @@
+@* create.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(f: Form[TeacherContests.Data], contestLevels : Iterable[TeacherContests.ContestLevel], infos: Iterable[TeacherSchoolClassDAO.TeacherSchoolInfo])
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+<style>span.disabled { text-decoration: line-through; color: grey;} </style>
+}
+
+@user("CLC", stylesheets=stylesheets) {
+
+<h2>@nlfren{Maak een lokale wedstrijd aan}{Créer un concours local}{Create a local competition}</h2>
+
+@form(action=routes.TeacherContests.createNew){
+
+@defining(f("contest")){ field =>
+<tr>
+    <td class="label">
+     <label for="@field.id">@nlfren{Niveau - wedstrijd}{Niveau - concours}{Level - contest}
+     </label>
+    </td>
+    <td>
+        <select name="@field.name" id="@field.id">
+            @foreach(contestLevels){ cl =>
+                @option(field.value,cl.contestId+":"+cl.levelId){
+                    @cl.levelName - @cl.title
+                }
+            }
+        </select>
+    </td>
+</tr>
+}
+
+@nlfren{
+    @selectSchool(f("schoolId"), "School", infos)
+    @inputText(f("comment"), '_label -> "Beschrijving, bijv.: Donderdag - 3a & 3b")
+    @submitButton("Aanmaken")
+}{
+    @selectSchool(f("schoolId"), "École", infos)
+    @inputText(f("comment"), '_label -> "Description, par ex.: Jeudi - 3a & 3b")
+    @submitButton("Créer")
+}{
+    @selectSchool(f("schoolId"), "School", infos)
+    @inputText(f("comment"), '_label -> "Description, e.g., Thursday - 3a & 3b ")
+    @submitButton("Create")
+}
+
+}
+
+<p class="footnote">
+@*       @nlfren{Moeilijkheidsgraden:}{Niveaux de difficulté:}{Levels of difficulty:} *@
+       @foreach(db.DataAccess.getLevels){ lvl =>
+           <b>@lvl.getName:</b> @lvl.getDescription
+       }
+</p>
+}
+

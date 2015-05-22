@@ -1,0 +1,94 @@
+@* uploaded.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(uploaded: Int, notUploaded: Int, list: Iterable[util.excel.StudentInClassOrError], ts: TeacherSchool)
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+<style>
+    tbody th { text-align: right; }
+</style>
+}
+@user("ATU", stylesheets = stylesheets) {
+
+<div class="alert alert-success">
+   @nlfren{<b>@uploaded</b> records werden opgeslagen in de databank - zoals hieronder opgelijst.
+    <b>@notUploaded</b> records bevonden zich reeds in de databank.
+    }{<b>@uploaded</b> entrés ont été téléchargées à la base de données - comme affiché ci-dessous.
+   (<b>@notUploaded</b> entrées y étaient déjà enregistrées avant).
+    }{<b>@uploaded</b> records were uploaded to the database, as displayed below.
+    (<b>@notUploaded</b> records were already in the database.)
+    }
+</div>
+
+<h2>@ts.getSchoolName</h2>
+
+<p>(@downloadLink(ts.getSchoolId))</p>
+
+<div class="table_wrapper">
+    <table>
+        <thead>
+           <tr>
+               <th></th>
+               <th>@nlfren{Klas}{Classe}{Class}</th>
+               <th>@nlfren{Naam}{Nom}{Name}</th>
+               <th>@nlfren{Voornaam}{Prénom}{First name}</th>
+               <th>@nlfren{Emailadres}{Adresse email}{Email address}</th>
+               <th></th>
+               <th>@nlfren{Bebras ID}{ID Bebras}{Bebras ID}</th>
+               <th>@nlfren{Wachtwoord}{Mot de passe}{Password}</th>
+               <th></th>
+           </tr>
+        </thead>
+        <tbody>
+        @foreach.trOrElse(list){ data =>
+            <th>@data.getRowNumber</th>
+            <td>@data.getClassCode</td>
+            <td>@data.getName</td>
+            <td>@data.getFirstName</td>
+            <td>@data.getEmail</td>
+            <td>@Messages(data.getGenderKey)</td>
+            <td>@data.getBebrasId</td>
+            <td>@data.getInitialPassword</td>
+            @if(data.hasError){
+                <td class="text-danger">@Messages(data.getErrorCode)</td>
+            } else {
+               <td></td>
+            }
+        }{
+        <tr><td class="dataTables_empty" colspan="10">@nlfren{Geen nieuwe records}{Pas de nouvelles entrées}{No new records}.</td></tr>
+        }
+        </tbody>
+        <tfoot><tr><th colspan="10"></th></tr></tfoot>
+    </table>
+</div>
+
+}

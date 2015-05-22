@@ -1,0 +1,303 @@
+/* tables.css
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+/*
+ * Additional CSS for pages that contain 'data tables'
+ *
+ * Style based on the dataTables demo css
+ *
+ * General structure
+ * .table_wrapper
+ *   .pre_table
+ *       .pre_table_left .pre_table_right
+ *   table
+ *     thead
+ *     tbody
+ *        tr.odd
+ *        tr.foot
+ *     tfoot
+ *   .post_table
+ *       .post_table_left .post_table_right
+ *   ---- should be cleared 
+ */
+
+.table_wrapper {
+    font-size: 12px;
+    font-family: sans-serif;
+}
+
+.table_wrapper button {
+    font-size: 11px;
+}
+
+table {
+    border-collapse: collapse; 
+    
+    width: 100%;
+    margin: 0 auto;
+}
+
+thead th {
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 3px 2px 3px 10px; /* want to click on sort icons too */
+}
+
+/* Make links in the head to span the whole header */
+thead th a {
+   display: block;
+   width: 100%;
+}
+
+tr.odd {
+    background-color: #E2E4FF;
+}
+tr.even {
+    background-color: #FFFFFF;
+}
+tr.odd td.sorted {
+    background-color: #D3D6FF;
+}
+tr.even td.sorted {
+    background-color: #EAEBFF;
+}
+
+tr.even.row_selected td,
+tr.even.row_selected th {
+    background-color: #B0BED9;
+    border: solid #B0BED9;
+    border-width: 0px 1px 0px 1px;    
+}
+tr.odd.row_selected td,
+tr.odd.row_selected th {
+    background-color: #9FAFD1;
+    border: solid #9FAFD1;
+    border-width: 0px 1px 0px 1px; 
+}
+
+tr.even.details_row  {
+    background-color: #ffffff;
+    border: solid #B0BED9;
+    border-width: 0px 1px 1px 1px; 
+}
+tr.odd.details_row  {
+    background-color: #ffffff;
+    border: solid #9FAFD1;
+    border-width: 0px 1px 1px 1px;
+}
+
+
+.dataTables_empty {
+    text-align: center;
+}
+
+td,
+th {
+    padding: 3px 10px;
+}
+
+td.center,th.center {
+    text-align: center;
+}
+
+tfoot th {
+    border-top: 1px solid black;
+    font-weight: bold;
+    padding: 3px 10px;
+}
+
+/*
+ * Otherwise the columns will be too wide
+ */
+tfoot input {
+    width: 100%;
+    margin: 0.5em 0;
+}
+
+.pre_table {
+    display: table;
+    width: 100%;
+}
+
+.pre_table_left {
+    display: table-cell;
+    text-align: left;
+}
+
+.pre_table_right {
+    display: table-cell;
+    text-align: right;
+}
+
+.post_table {
+    display: table;
+    width: 100%;
+}
+
+.post_table_left {
+    display: table-cell;
+    text-align: left;
+}
+
+.post_table_right {
+    display: table-cell;
+    text-align: right;
+}
+
+/*
+ * Pagination
+ */
+
+.paginate_disabled_previous,
+.paginate_enabled_previous,
+.paginate_disabled_next,
+.paginate_enabled_next {
+    color: #111111 !important;
+    cursor: pointer;
+    height: 19px;
+}
+.paginate_disabled_previous:hover,
+.paginate_enabled_previous:hover,
+.paginate_disabled_next:hover,
+.paginate_enabled_next:hover {
+    text-decoration: none !important;
+}
+.paginate_disabled_previous:active,
+.paginate_enabled_previous:active,
+.paginate_disabled_next:active,
+.paginate_enabled_next:active {
+    outline: medium none;
+}
+.paginate_disabled_previous,
+.paginate_disabled_next {
+    color: #666666 !important;
+}
+.paginate_disabled_previous,
+.paginate_enabled_previous {
+    padding-left: 23px;
+}
+.paginate_disabled_next,
+.paginate_enabled_next {
+    margin-left: 10px;
+    padding-right: 23px;
+}
+.paginate_disabled_previous {
+    background: url("../images/back_disabled.png") no-repeat scroll left top transparent;
+}
+.paginate_enabled_previous {
+    background: url("../images/back_enabled.png") no-repeat scroll left top transparent;
+}
+.paginate_enabled_previous:hover {
+    background: url("../images/back_enabled_hover.png") no-repeat scroll left top transparent;
+}
+.paginate_disabled_next {
+    background: url("../images/forward_disabled.png") no-repeat scroll right top transparent;
+}
+.paginate_enabled_next {
+    background: url("../images/forward_enabled.png") no-repeat scroll right top transparent;
+}
+.paginate_enabled_next:hover {
+    background: url("../images/forward_enabled_hover.png") no-repeat scroll right top transparent;
+}
+
+/**
+ * Sorting (in thead)
+ */
+
+.sorting_asc {
+    background: url("../images/sort_asc.png") no-repeat scroll right center transparent;
+}
+.sorting_desc {
+    background: url("../images/sort_desc.png") no-repeat scroll right center transparent;
+}
+.sorting {
+    background: url("../images/sort_both.png") no-repeat scroll right center transparent;
+}
+
+/**
+ * Expand / collapse
+ */
+td.expand_button {
+    height: 26px;
+    background: url("../images/collapsed.png") no-repeat scroll center center transparent;
+}
+
+td.collapse_button {
+    height: 26px;
+    background: url("../images/expanded.png") no-repeat scroll center center transparent;
+}
+
+/**
+ * Buttons
+ */
+.search_button {
+   background-image: url("../images/search.png");
+   background-repeat: no-repeat;
+   background-position: center center;
+   width:28px;
+   height:24px;
+}
+
+.edit_button {
+   background-image: url("../images/pencil.png");
+   background-repeat: no-repeat;
+   background-position: center center;
+   width:28px;
+   height:24px;
+}
+
+.add_button {
+   background-image: url("../images/add.png");
+   background-repeat: no-repeat;
+   background-position: center center;
+   width:28px;
+   height:24px;
+}
+
+.move_down_button {
+   background-image: url("../images/move-down.png");
+   background-repeat: no-repeat;
+   background-position: center center;
+   width:28px;
+   height:24px;
+}
+
+.move_down_disabled_button {
+   background-image: url("../images/move-down-disabled.png");
+   background-repeat: no-repeat;
+   background-position: center center;
+   width:28px;
+   height:24px;
+}
+
+.move_up_button {
+   background-image: url("../images/move-up.png");
+   background-repeat: no-repeat;
+   background-position: center center;
+   width:28px;
+   height:24px;
+}
+
+.move_up_disabled_button {
+   background-image: url("../images/move-up-disabled.png");
+   background-repeat: no-repeat;
+   background-position: center center;
+   width:28px;
+   height:24px;
+}
+
+button.hidden_button {
+   position: absolute;
+   left: -100%;
+   width: 0;
+   height: 0;
+   padding: 0;
+   border: 0;
+}
+
+td.icon_column,
+th.icon_column {
+    width: 28px;
+}

@@ -1,0 +1,121 @@
+@* list.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(list: Iterable[TeacherContests.ListInfo], availableForPreview: Iterable[ContestDAO.ContestAvailableLevels])
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+<style>.school {color : #52679C; font-size: larger; font-weight: bold;}</style>
+}
+
+@status(s: LCStatus)={
+   @Messages("lcstatus."+s)
+}
+
+@user("CLL",stylesheets=stylesheets){
+@nlfren{
+<p>Om een wedstrijd  te organiseren voor je leerlingen, moet je verschillende stappen doorlopen:</p>
+<ul>
+    <li>Je moet een <i>lokale wedstrijd</i> aanmaken voor je school. (Zie hieronder.)</li>
+    <li>Je moet leerlingen <i>toegang geven</i> tot deze lokale wedstrijd.</li>
+    <li>Je moet de lokale wedstrijd <i>openen</i>.</li>
+</ul>
+<p>De eerste twee stappen kan je al op voorhand doen. Voor de laatste stap wacht je best tot kort voor de eigenlijke wedstrijd.</p>
+<p>Heb je verschillende groepen leerlingen die aan dezelfde wedstrijd zullen deelnemen op een verschillend tijdstip, dan maak
+je best voor elke groep een afzonderlijke lokale wedstrijd aan.</p>
+}{
+<p>Pour organiser un concours pour votre élèves il faut parcourir les étappes suivantes:</p>
+<ul>
+    <li>Il faut créer un <i>concours local</i> à votre école. (Voir ci-dessous.)</li>
+    <li>Il faut <i>donner accès</i> au concours local aux élèves.</li>
+    <li>Il faut <i>ouvrir</i> le concours local.</li>
+</ul>
+<p>Les deux premières étapes peuvent être effectuées à l'avance. Pour la dernière étape il faut mieux attendre jusqu'à ce
+que le concours proprement dit a lieu.</p>
+<p>Avez-vous des différents groupes d'élèves qui participeront au même concours mais à des moments différents? Alors il
+    est plus facile de créer un concours distinct pour chaque groupe.</p>
+}{
+<p>To organize a contest in one of your classes, you need to go through several steps:</p>
+<ul>
+    <li>You must create a <i>local contest</i> for your school. (See below.)</li>
+    <li>You must <i>assign</i> pupils to that local contest.</li>
+    <li>You must open that contest, so that it can be taken.</li>
+</ul>
+<p>The first two steps you can do beforehand, For the last step however, it is best to wait until the last moment.</p>
+<p>If you have several groups of pupils that will take the same contest at different times, it is best to
+create a separate local contest for each group.</p>
+}
+
+@prevlist(availableForPreview)
+
+<h3>
+@nlfren{Lijst van lokale wedstrijden}{Liste des concours locals}{List of local competitions}
+</h3>
+
+<div class="table_wrapper">
+    <div class="pre_table">
+       <div class="pre_table_right">
+       @buttonForm(action=routes.TeacherContests.showNew){
+            @nlfren{Creëer een nieuwe lokale wedstrijd}{Cŕeer un nouveau concours local}{Create a new local competition}
+        }
+       </div>
+    </div>
+
+
+    <table>
+        <thead>
+            <th></th>
+            <th>@nlfren{Titel}{Titre}{Title}</th>
+            <th>@nlfren{Beschrijving}{Description}{Description}</th>
+            <th>@nlfren{Niveau}{Niveau}{Level}</th>
+            <th>@nlfren{Status}{État}{State}</th>
+        </thead>
+        <tbody>
+        @foreach(list){ info =>
+            <tr>
+                <th class="school" colspan="3">@info.name</th>
+            </tr>
+            @foreach.trOrElse(info.lcs){ lc =>
+               <td><a href="@routes.TeacherContests.start(lc.getId)" class="like_button edit_button"></a></td>
+               <td>@lc.getTitle</td>
+               <td>@lc.getComment</td>
+               <td>@lc.getLevel</td>
+               <td>@status(lc.getStatus)</td>
+            }{
+            <td colspan="10" class="dataTables_empty">@Messages("table.main.empty")</td>
+            }
+        }
+        </tbody>
+        <tfoot><tr><th colspan="10"></th></tr></tfoot>
+    </table>
+</div>
+
+}

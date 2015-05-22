@@ -1,0 +1,73 @@
+@* create.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(f : Form[Contests.Data])
+
+@user("CON") {
+@nlfren{
+
+    <h2>Nieuwe wedstrijd aanmaken</h2>
+
+    @form(action=routes.Contests.createNew) {
+        @subtitle{Algemene gegevens}
+        @select(f("type"), "Type", "PUBLIC" -> "Publiek", "RESTRICTED" -> "Beperkt toegankelijk", "OFFICIAL" -> "Officiële wedstrijd")
+        @subtitle{Titel (in verschillende talen)}
+        @foreach(db.DataAccess.getLanguages){l =>
+            @inputText(field = f("i18n[" + l.getLang + "].title"), '_label -> l.getDescription)
+        }
+        @submitButton("Aanmaken")
+    }
+}{
+
+    <h2>Créer un nouveau concours</h2>
+
+    @form(action=routes.Contests.createNew) {
+        @subtitle{Information générale}
+        @select(f("type"), "Type", "PUBLIC" -> "Publique", "RESTRICTED" -> "Accès limité", "OFFICIAL" -> "Concours officiel")
+        @subtitle{Titre (en plusieurs langues)}
+        @foreach(db.DataAccess.getLanguages){l =>
+            @inputText(field = f("i18n[" + l.getLang + "].title"), '_label -> l.getDescription)
+        }
+        @submitButton("Créer")
+    }
+}{
+    <h2>Create a new contest</h2>
+
+    @form(action=routes.Contests.createNew) {
+        @subtitle{General information}
+        @select(f("type"), "Type", "PUBLIC" -> "Public", "RESTRICTED" -> "Limited access", "OFFICIAL" -> "Official contest")
+        @subtitle{Title (in different languages)}
+        @foreach(db.DataAccess.getLanguages){l =>
+            @inputText(field = f("i18n[" + l.getLang + "].title"), '_label -> l.getDescription)
+        }
+        @submitButton("Create")
+    }
+}}

@@ -1,0 +1,172 @@
+@* lc.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(lc: LocalContest, map: Map[String, List[LocalContestDAO.StudentPermission]])
+        
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+}
+
+@buttonGroup={
+<tr>
+    <th colspan="10" class="right">
+        @nlfren{Acties op de geselecteerde leerlingen:}{Actions pour les élèves sélectionnés:}{Actions on selected pupils:}
+        <button name="action" value="grant">@nlfren{Geef toelating}{Autoriser}{Grant permission}</button>
+        <button name="action" value="revoke">@nlfren{Verwijder toelating}{Annuler l'autorisation}{Revoke permission}
+        </button>
+    </th>
+</tr>
+}
+
+@user("CLC", stylesheets=stylesheets) {
+
+<h2>@lc.getLevel - @lc.getTitle</h2>
+<h3>@lc.getComment</h3>
+
+@lc.getStatus match {
+case LCStatus.CAN_BE_OPENED => {
+    @nlfren{<p>Deze lokale wedstrijd is <b>nog niet geopend</b>. Je moet hem openen juist voordat de wedstrijd start zodat de
+leerlingen eraan kunnen deelnemen. Enkel leerlingen aan wie je expliciet toelating hebt gegeven (zie hieronder) zullen kunnen meedoen.
+        @buttonForm(routes.TeacherContests.changeStatus(lc.getId,2)){Lokale wedstrijd openen}</p>
+    }{<p>Ce concours local n'est <b>pas encore ouvert</b>. Il faut l'ouvrir juste avant de commencer le concours afin
+         que les élèves puissent y participer. Seuls les élèves qui ont reçu l'autorisation (voir ci-dessous) pourront participer
+         au concours.
+        @buttonForm(routes.TeacherContests.changeStatus(lc.getId,2)){Ouvrir le concours local}</p>
+    }{<p>This local competition is <b>not yet open</b>. You should open it just before you start the competition so
+        that pupils can participate. Only those pupils that have been given permission (see below) will be able to
+        take part in the contest.
+        @buttonForm(routes.TeacherContests.changeStatus(lc.getId,2)){Open local competition}
+    </p>
+    }
+}
+case LCStatus.BLOCKED => {
+    @nlfren{<p>Deze lokale wedstrijd id <b>nog niet geopend</b>. Je kunt hem pas openen tijdens de officiële wedstrijdweek.</p>
+    }{<p>Ce concours local n'est <b>pas encore ouvert</b>. Vous ne pouvez l'ouvrir que pendant la semaine officielle du concours.
+    }{<p>This local competition is <b>not yet open</b>. You will only be able to open it during the official
+       contest week.</p>
+    }
+}
+case LCStatus.OPEN => {
+        @nlfren{
+        <p>Deze lokale wedstrijd is <b>open</b>. De leerlingen die daarvoor toelating hebben gekregen (zie hieronder) kunnen nu
+        aan deze wedstrijd deelnemen. Ze zullen hun resultaten echter niet kunnen bekijken totdat de wedstrijd wordt afgesloten.
+        @buttonForm(routes.TeacherContests.changeStatus(lc.getId,3)){Lokale wedstrijd afsluiten}</p>
+        }{<p>Ce concours local est <b>ouvert</b>. Les élèves qui ont reçu l'autorisation (voir ci-dessous) peuvent maintenant
+         participer à ce concours. Ils ne pourront toutefois pas voir leurs résultats jusqu'à la fermeture du concours.
+        @buttonForm(routes.TeacherContests.changeStatus(lc.getId,3)){Fermer le concours local}</p>
+        }{
+    <p>This local competition is <b>open</b>. The students that have been given permission (see below) can now
+        participate in this competition. They will however not be able to see their results until you close the competition.
+        @buttonForm(routes.TeacherContests.changeStatus(lc.getId,3)){Close local competition}
+    </p>
+        }
+}
+case LCStatus.CLOSED => {
+        @nlfren{<p>Deze lokale wedstrijd is <b>afgesloten</b>.</p>
+        }{<p>Ce concours local est <b>fermé</b>.</p>
+        }{<p>This local competition is now <b>closed</b>.</p>
+        }
+}
+case LCStatus.PENDING => {
+        @nlfren{<p>Deze lokale wedstrijd is <b>afgesloten</b>. De leerlingen kunnen hun resultaten pas opvragen ná de officiële wedstrijdweek.</p>
+        }{<p>Ce concours local est <b>fermé</b>. Les élèves ne pourront voir leurs résultats qu'après la semaine officielle du concours.</p>
+        }{<p>This local competition is now <b>closed</b>. Pupils will be able
+        to see their results only after the official contest week.</p>
+        }
+}
+case _  => {
+    <p>Strange. You should not see this message... </p>
+}
+}
+
+<h2>@nlfren{Deelnamerechten}{Autorisations}{Permissions}</h2>
+
+@nlfren{
+<p>Hieronder kan je zien (en wijzigen) welke studenten er al dan niet aan deze lokale wedstrijd mogen deelnemen (per klas).</p>
+}{
+<p>Ci-dessous vous pouvez voir (et modifier) les autorisations accordées à ce concours local pour tous les élèves des classes correspondantes.</p>
+}{
+<p>Below you can see or edit the permissions granted to this local competition for all pupils of the corresponding
+classes.</p>
+}
+
+
+@foreach(map.keySet){ key =>
+
+    <h3>@nlfren{Klas:}{Classe:}{Class:} @key</h3>
+
+    <div class="table_wrapper">
+        <div class="pre_table">
+            <div class="pre_table_right">
+                <form action="@routes.TeacherContests.grouped(lc.getId,key)" method="POST">
+                    <b>@nlfren{Acties op de volledige klas:}{Actions pour toute la classe:}{Actions for the entire class:} </b>
+                    <button name="action" value="grant">@nlfren{Toelating geven aan iedereen}{Donner l'autorisation à toute la classe}{Grant permissions to all}</button>
+                    <button name="action" value="revoke">@nlfren{Toelating schrappen voor iedereen}{Annuler l'autorisation pour toute la classe}{Revoke permissions from all}</button>
+                </form>
+            </div>
+        </div>
+
+        <form action="@routes.TeacherContests.manage(lc.getId)" method="POST">
+        <table>
+            <thead>
+               @buttonGroup
+               <tr>
+                   <th width="80">@nlfren{Toegelaten?}{Admis?}{Admitted?}</th>
+                   <th>@nlfren{Naam}{Nom}{Name}</th>
+                   <th width="80">@nlfren{Bebras ID}{ID Bebras}{Bebras ID}</th>
+                   <th width="10"></th>
+               </tr>
+            </thead>
+            <tbody>
+            @foreach.trOrElse(map.get(key)){ st =>
+               <td>@if(st.permitted){<b>@Messages("yesno.true")</b>}else{@Messages("yesno.false")}</td>
+@*                <td>@Messages("yesno."+st.permitted)</td> *@
+                <td>@st.name</td>
+                <td>@st.bebrasId</td>
+            <td><input type="checkbox" name="boxes[@st.studentId]" value="@st.studentId"></td>
+            }{
+            <tr><td class="dataTables_empty" colspan="10">@Messages("table.main.empty")</td></tr>
+            }
+            </tbody>
+            <tfoot>
+            <tr>
+                @buttonGroup
+            </tr>
+            </tfoot>
+        </table>
+        </form>
+    </div>
+
+    </form>
+}
+
+}
+

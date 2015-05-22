@@ -1,0 +1,127 @@
+@* preview.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(arg: Questions.PreviewArg)
+
+@scripts={
+<script src='@routes.Assets.at("javascripts/iframesize.js")' language='JavaScript'></script>
+<script src='@routes.Assets.at("javascripts/jquery-1.8.3.min.js")' language="JavaScript"></script>
+}
+
+@styles={
+<style>
+    iframe,.nocontent{width:800px; border: none; margin: 5px 0px;}
+    #langdep{padding: 5px 10px; border: 1px solid grey; margin:10px 54px 0px; clear: both;}
+    .nocontent{height:60px; vertical-align: middle; text-align: center; color: grey; }
+    hr{color: grey;}
+</style>
+}
+
+@user("QUP",scripts,styles) {
+
+<h2>Vraag: @arg.question.getTitle</h2>
+
+@form(action=routes.Questions.updateExternalId(arg.question.getId)) {
+        @inputText(arg.fei("externalId"), '_label -> "Referentiecode (bijv. 2012-AT-08)")
+        @submitButton("Wijzig deze gegevens")
+}
+
+@form(action=routes.Questions.updateNumberOfAnswers(arg.question.getId)) {
+        @inputText(arg.fna("numberOfAnswers"), '_label -> "Aantal mogelijke antwoorden (0 = open vraag)")
+        @submitButton("Wijzig deze gegevens")
+}
+
+<p>Opgelet. Wanneer je dit verandert zullen de antwoorden op de vragen worden verwijderd.</p>
+
+
+<div id="langdep">
+    <select id="choose_language">
+        @foreach(db.DataAccess.getLanguages){ l =>
+            @if(l.getLang == lang.code) {
+              <option value="@l.getLang" selected="selected">@l.getDescription</option>
+            } else {
+              <option value="@l.getLang">@l.getDescription</option>
+            }
+        }
+    </select>
+
+    @foreach(arg.list){ q =>
+    <div id="@q.getLang" class="selectable">
+        @form(action=routes.Questions.updateI18n(arg.question.getId,q.getLang), 'enctype -> "multipart/form-data") {
+            @inputText(arg.g.get(q.getLang)("title"), '_label -> "Titel")
+            @inputText(arg.g.get(q.getLang)("correctAnswer"), '_label -> "Correct antwoord")
+            @inputFile("question", '_label -> "Opgavenbestand")
+            @inputFile("feedback", '_label -> "Feedbackbestand")
+            @submitButton("Wijzig / upload")
+        }
+        <hr/>
+        @if(q.isUploadedQ) {
+            <iframe src="@arg.questionBaseURL/@q.getLang/index.html" onLoad="setIframeHeight(this.id);" id="iframeQ@q.getLang">
+            </iframe>
+            } else {
+        <div class="nocontent">Nog geen opgave geüploaded.</div>
+        }
+        <hr/>
+        @if(q.isUploadedF) {
+            <iframe src="@arg.feedbackBaseURL/@q.getLang/index.html" onLoad="setIframeHeight(this.id);" id="iframeF@q.getLang">
+            </iframe>
+        } else {
+        <div class="nocontent">Nog geen feedback-pagina geüploaded.</div>
+        }
+    </div>
+    }
+</div>
+
+<script>
+        @* TODO: Hide/show to separate javascript file *@
+        $( function() {
+            document.domain = "ugent.be"; /* enable cross-domain browsing. */
+
+            hideshow = function(choice) {
+                var location = choice.value;
+                var div = $('#' + location);
+
+                $('div.selectable').hide();
+                div.show();
+                div.children ("iframe").each (function() { setIframeHeight(this.id); }); /* size the iframe */
+            }
+
+            /* see http://stackoverflow.com/questions/11238119/show-hide-specific-div-when-selecting-an-option-from-a-dropdown-using-jquery */
+            sel = document.getElementById('choose_language');
+            hideshow(sel);
+            $(sel).change(function(){
+               hideshow(this);
+            });
+        } )
+
+</script>
+
+}

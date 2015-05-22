@@ -1,0 +1,158 @@
+/* layout.css
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+
+/* PAGE STRUCTURE
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+#general_wrapper {
+    background-color: white;
+    width: 1000px;
+    margin: auto;
+    padding: 0px;
+}
+
+/* PAGE STRUCTURE - BANNER
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * banner
+ *    banner_content
+ *      banner_navigation
+ *        ul
+ *          li
+ *      banner_logo
+ */
+
+#banner {
+    background: white url("../images/header-low.png") no-repeat;
+    height: 100px;
+    width: 100%;
+}
+
+#banner_content {
+    margin: 0px 30px;
+    padding: 10px 92px 10px 0px; /* place for logo */
+    border-bottom : 1px solid silver;
+    height: 80px;
+    width:  848px; /* 1000px - 2x30px (margin) - 92px (logo) */
+    display: table;
+
+    background: transparent url("../images/logo.png") no-repeat 863px 10px;
+}
+
+#banner_navigation {
+    display: table-cell;
+    vertical-align: bottom;
+    width: 100%;
+}
+
+#banner_navigation ul {
+    margin: 0;
+    padding: 10px 0 0 0;
+    width: 100%;
+    border-top: 1px solid silver;
+}
+
+#banner_navigation li {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding-right: 30px;
+}
+
+#banner_navigation li.pullright {
+    float: right;
+    padding-left: 30px;
+    padding-right: 0px;
+}
+
+#banner_navigation a {
+    text-decoration : none;
+    color: black;
+}
+
+#banner_navigation li.active a {
+    text-decoration : none;
+    color: #52679c;
+}
+
+#banner_navigation a:hover {
+    color: grey;
+}
+
+
+/* PAGE STRUCTURE - CONTENTS
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * contents
+ */
+
+#contents {    
+    width: 940px; /* 1000px - padding */
+    padding: 10px 30px;
+    position: relative;
+}
+
+/* PAGE STRUCTURE - FOOTER
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * footer
+ *    footer_content
+ *      footer_left_block
+ *      footer_center_block
+ *      footer_right_block
+ */
+
+#footer {
+    background: white url("../images/footer.png") no-repeat;
+    height: 150px;
+    width: 100%;
+    clear: both;
+}
+
+#footer_content {
+    margin: 0px 30px;
+    border-top : 1px solid silver;
+    display: table;
+    width:940px; /* 1000px - margins */
+    font-size : 12px;
+    font-family: Verdana, Arial, sans-serif;
+}
+
+#footer_left_block {
+    width : 30%;
+    display: table-cell;
+    text-align: left;
+    padding-top: 30px;
+    padding-left: 20px;
+}
+#footer_center_block {
+    width : 40%;
+    text-align: center;
+    display: table-cell;
+    padding-top: 30px;
+}
+#footer_right_block {
+    width : 30%;
+    text-align: right;
+    display: table-cell;
+    padding-top: 30px;
+    padding-right: 20px;
+}
+
+#footer_content a {
+    text-decoration : none;
+    font-weight : normal;
+    color : black;
+}
+#footer_content a:hover {
+    color : grey;
+}
+
+/* for logout button in footer */
+#footer_content form{
+    display: inline;
+}
+#footer_content button {
+    font-size: inherit;
+}
+

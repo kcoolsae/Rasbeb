@@ -1,0 +1,98 @@
+@* show.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(args : Schools.ListArgs, list: Iterable[School])
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+}
+@user("SAT", stylesheets = stylesheets) {
+
+@nlfren{
+<h2>School toevoegen</h2>
+<p>Zoeken  de school op in onderstaande lijst en druk op de knop in de linkerkolom.
+    Scholen waarvoor je geen klassen of studenten wenst te registreren,
+hoef je niet op te geven.</p>
+}{
+<h2>Ajouter une école</h2>
+<p>Cherchez votre école dans la liste ci-dessous et appuyez sur le bouton dans la colonne à gauche.
+           Vous ne devez pas spécifier des écoles pour lesquelles vous n'avez pas l'intention d'enregistrer des élèves ou des classes.</p>
+}{
+<h2>Add a school</h2>
+<p>Search in the list below and press the button in the left column to add a school.
+You do not need to specify schools for which you do not intend to register students or classes.</p>
+}
+
+@dataTable(new TeacherSchoolsTable(args.f,args.s,args.p)){table =>
+    @table.pre{
+        @* nothing *@
+    }
+    @table.form{
+        @table.main(args.count){
+            @table.column("NAME"){@nlfren{Naam}{Nom}{Name}}
+            @table.column("STREET"){@nlfren{Straat}{Rue}{Street}}
+            @table.column("ZIP"){@nlfren{PN}{CP}{ZIP}}
+            @table.column("TOWN"){@nlfren{Gemeente}{Commune}{Town}}
+        }{
+            @foreach.tr(args.list){school =>
+                <td><button name="select" value="@school.getId" class="add_button"></button></td>
+                @table.cell("NAME"){@school.getName}
+                @table.cell("STREET"){@school.getStreet}
+                @table.cell("ZIP"){@school.getZip}
+                @table.cell("TOWN"){@school.getTown}
+            }
+        }{
+            <th>
+                <input type="text" name="name"
+                       placeholder="@nlfren{Filter op naam}{Filtrer par nom}{Filter by name}"
+                       value="@table.filter.name">
+            </th>
+            <th width="29%">
+                <input type="text" name="street"
+                       placeholder="@nlfren{Filter op straat}{Filtrer par rue}{Filter by street}"
+                       value="@table.filter.street">
+            </th>
+            <th width="8%">
+                <input type="text" name="zip"
+                       placeholder="@nlfren{Filter op postcode}{Filtrer par code postal}{Filter by zip code}"
+                       value="@table.filter.zip">
+            </th>
+            <th width="20%">
+                <input type="text" name="town"
+                       placeholder="@nlfren{Filter op gemeente}{Filtrer par commune}{Filter by town}"
+                       value="@table.filter.town">
+            </th>
+        }
+        @table.post(args.count)
+    }
+}
+
+}

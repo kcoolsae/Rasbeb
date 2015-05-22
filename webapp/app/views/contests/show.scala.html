@@ -1,0 +1,134 @@
+@* show.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(contest: Contest, f : Form[Contests.Data], list : Iterable[Question], count: Int, qslist: Iterable[QuestionSetDAO.QuestionWithMarks], filter : QuestionsFilter, s : Sorter, p: Pager)
+
+@stylesheets={
+<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+<style>
+    .small_input {width: 35px;}
+</style>
+}
+@user("COS", stylesheets=stylesheets) {
+
+    @* TODO: Factor out common code with list.scala.html *@
+
+    <h2>Wedstrijd: @contest.getTitle</h2>
+
+    @form(action=routes.Contests.update(contest.getId)) {
+        @subtitle{Algemene gegevens}
+        @select(f("type"), "Type", "PUBLIC" -> "Publiek", "RESTRICTED" -> "Beperkt toegankelijk", "OFFICIAL" -> "Officiële wedstrijd")
+        @subtitle{Titel (in verschillende talen)}
+        @foreach(db.DataAccess.getLanguages){l =>
+            @inputText(field = f("i18n[" + l.getLang + "].title"), '_label -> l.getDescription)
+        }
+        @submitButton("Wijzigen")
+    }
+
+    <h2>Vragenlijsten voor deze wedstrijd</h2>
+
+        <p>Andere acties: <a href="@routes.Contests.showForSorting(contest.getId)">Volgorde herschikken</a></p>
+
+    <div class="table_wrapper">
+        @form(action = routes.Contests.adjustMarks(contest.getId)){
+        <table>
+            <thead>
+               <th width="15%">@nlfren{Referentiecode}{Code de référence}{Reference code}</th>
+               <th width="33%">@nlfren{Titel}{Titre}{Title}</th>
+               @foreach(db.DataAccess.getLevels){ lvl =>
+                  <th width="13%">@lvl.getName</th>
+               }
+            </thead>
+            <tbody>
+            @foreach.tr(qslist){ qwp =>
+                <td>@qwp.externalId</td>
+                <td>@qwp.title</td>
+                @foreach.withIndex(qwp.marks){ (p,i) =>
+                   @if(p.whenCorrect>0) {
+                    <td><input type="text" class="small_input" name="marks[@qwp.index:@i].correct" value="@p.whenCorrect">
+                        <input type="text" class="small_input" name="marks[@qwp.index:@i].wrong" value="@p.whenWrong">
+                    </td>
+                   }else{
+                    <td>
+                        <input type="text" class="small_input" name="marks[@qwp.index:@i].correct" value="" placeholder="juist">
+                        <input type="text" class="small_input" name="marks[@qwp.index:@i].wrong" value="" placeholder="fout">
+                    </td>
+                   }
+                }
+            }
+            </tbody>
+        </table>
+        <p><button>Aanpassingen doorsturen</button></p>
+        }
+    </div>
+
+    <p>Voeg een vraag toe aan een vragenlijst door hieronder op de plus-knop te klikken.</p>
+
+    @* TODO: refactor code in common with questions.list *@
+
+    <a name="list"></a>
+
+    @dataTable(new QuestionSetsTable(contest.getId,filter,s,p)){table =>
+    @table.pre{
+        @* Nothing here *@
+    }
+    @table.form{
+        @table.main(count){
+            @table.column("EXTERNAL_ID"){@nlfren{Referentiecode}{Code de référence}{Reference code}}
+            @table.column("TITLE"){@nlfren{Titel}{Titre}{Title}}
+            <th colspan="2">@nlfren{Antwoord}{Réponse}{Answer}</th>
+        }{
+            @foreach.tr(list){question =>
+                <td><button name="select" value="@question.getId" class="add_button"></button></td>
+                @table.cell("EXTERNAL_ID"){@question.getExternalId}
+                @table.cell("TITLE"){@question.getTitle}
+                <td>@ListQuestions.answerRange(question)</td>
+                <td>@question.getCorrectAnswer</td>     @* TODO: is this OK when null? *@
+            }
+        }{
+            <th width="18%">
+                <input type="text" name="externalId"
+                       placeholder="@nlfren{Filter op code}{Filtrer par code}{Filter by code}"
+                       value="@table.filter.externalId">
+            </th>
+            <th>
+                <input type="text" name="title"
+                       placeholder="@nlfren{Filter op titel}{Filtrer par titre}{Filter by title}"
+                       value="@table.filter.title">
+            </th>
+            <th width="5%"></th>
+            <th></th>
+        }
+        @table.post(count)
+    }
+}
+
+}

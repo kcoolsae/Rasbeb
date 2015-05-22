@@ -1,0 +1,114 @@
+@* feedback.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(question: Question, arg: Participations.ShowFeedbackArg)
+
+@stylesheets={
+   <link href='@routes.Assets.at("css/contest.css")' rel='stylesheet' type='text/css'/>
+   <style>
+       iframe{width:780px; border: none; margin: 5px 0px;}
+   </style>
+}
+
+@scripts={
+   <script src='@routes.Assets.at("javascripts/iframesize.js")' language="JavaScript"></script>
+}
+
+@page("TFB",stylesheets=stylesheets,scripts=scripts){
+   <div id='banner_marks'>@arg.part.getTotalMarks/@arg.part.getMaximumMarks</div>
+   <div id='banner_title'>
+       <h1>@question.getTitle</h1>
+   </div>
+    <div id='banner_right'>
+         <table class="questionScores">
+            <tbody>
+               <tr>
+                   @nlfren{<td><b>Geen</b><br>antwoord</td>
+                   <td><b>Fout</b><br>antwoord</td>
+                   <td><b>Correct</b><br>antwoord</td>
+                   }{<td><b>Pas</b> de<br>réponse</td>
+                   <td>Réponse<br><b>fausse</b></td>
+                   <td>Réponse<br><b>juste</b></td>
+                   }{<td><b>No</b><br>answer</td>
+                   <td><b>Wrong</b><br>answer</td>
+                   <td><b>Correct</b><br>answer</td>
+                   }
+               </tr>
+               <tr>
+                  <td class="score nothing">0</td>
+                  <td class="score bad">@arg.qis.getMarksWhenWrong</td>
+                  <td class="score good">@arg.qis.getMarksWhenCorrect</td>
+               </tr>
+            </tbody>
+         </table>
+    </div>
+}{
+  <div id='margin'>
+     <div id="close">
+         @buttonForm(action = routes.Participations.showTerminate()){
+             @nlfren{Keer terug naar de hoofdpagina}{Retourner à la page d'accueil}{Return to the home page}
+         }
+     </div>
+      <ul>
+         @foreach(arg.nav){ q =>
+           <li class='@q.styleClass'>
+               @if(q.current){
+                  @q.title
+               } else {
+                  <a href="@q.index">@q.title</a>
+               }
+           </li>
+         }
+     </ul>
+  </div>
+  <div id='iframe_wrapper'>
+      <iframe src="@arg.questionURL" onLoad="setIframeHeight(this.id);" id="iframeQ">
+      </iframe>
+      <div id="answer_pane">
+         <p>@nlfren{Jouw antwoord: }{Votre réponse: }{Your answer: }
+            @if(arg.detail.getAnswer == null) {
+                @nlfren{(geen antwoord)}{(pas de réponse)}{(no answer)}
+            } else {
+                <b>@arg.detail.getAnswer</b>
+            }
+         </p>
+      </div>
+      <iframe src="@arg.feedbackURL" onLoad="setIframeHeight(this.id);" id="iframeF">
+      </iframe>
+  </div>
+
+<script>
+    document.domain = "ugent.be" /* enable cross-domain browsing. */
+</script>
+
+}
+
+

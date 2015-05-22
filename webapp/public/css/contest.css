@@ -1,0 +1,225 @@
+/* PAGE STRUCTURE - BANNER
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * banner
+ *    banner_content
+ *      banner_clock
+ *      banner_title
+ *      banner_right
+ *      banner_logo
+ */
+
+#banner_clock, #banner_marks {
+    display: table-cell;
+    width: 125px;
+    height: 60px;
+    
+    text-align: center;
+    border-radius: 7px;
+    margin: 20px 0px;
+    padding: 5px;
+    
+    vertical-align: middle;
+    
+    font-weight: bold;
+    font-family: courier, monospace;
+}
+
+#banner_clock {
+    font-size: 40px;
+    color: white;
+}
+
+#banner_clock.green {
+    border: 7px solid #5bb75b;
+    background-color: #5bb75b;
+}
+
+#banner_clock.red {
+    border: 7px solid #da4f49;
+    background-color: #da4f49;
+}
+
+#banner_clock.orange {
+    border: 7px solid #faa732;
+    background-color: #faa732;
+}
+
+#banner_clock.black {
+    border: 7px solid black;
+    background-color: black;
+}
+
+#banner_marks {
+    font-size: 30px;
+    border: 7px solid #52679c;
+    background-color: #52679c;
+    color: white;
+}
+
+#banner_title {
+    display: table-cell;
+
+    padding-left: 25px;
+    /* font-family: Verdana, Arial, sans-serif; */
+    width: 680px;
+    margin-right: -240px;
+}
+
+#banner_right {
+    display: table-cell;
+    width: 240px;
+    font-family: Verdana, Arial, sans-serif;
+}
+
+#banner_right table {
+    border: 1px solid grey;
+    width: 100%;
+}
+
+#banner_right table td {    
+    text-align:center;
+    vertical-align: middle;
+}
+
+#banner_right table td.score {
+    font-size: 20px;
+}
+
+#banner_right table td.score.bad {
+    color: red;
+}
+
+#banner_right table td.score.good {
+    color: green;
+}
+
+/* PAGE STRUCTURE - CONTENTS
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * contents
+ *    margin
+ *      stop
+ *      ul
+ *    iframe_wrapper
+ *      iframe
+ *      answer_pane
+ */
+
+#margin {
+    width: 185px;
+    margin-left: -30px;
+    padding-right: 15px;
+    float: left;
+}
+
+#margin #stop,#close {
+    padding: 5px 5px 10px 0px;
+    margin-left: 30px;
+    border-bottom: 1px solid silver;
+}
+
+#margin #stop button {
+    color:  #b94a48;
+    border-color: #b94a48;
+    background-color: #F2DEDE; /* = .alert-danger */
+}
+
+#margin #stop button:hover {
+    background-color: #e2cece;
+}
+
+#margin #close button {
+    color:  #468847;
+    border-color: #d6e9c6;
+    background-color: #dff0d8; /* = .alert-success */
+}
+
+#margin #close button:hover {
+    background-color: #cfe0c8;
+}
+
+#margin ul {
+    padding-left: 30px; 
+}
+
+#margin li {
+    list-style: none;
+    line-height: 30px;
+    font-size: smaller;
+    margin-left: -20px;
+    padding-left: 20px;
+    margin-right: -10px;
+    padding-right: 10px;
+}
+
+#margin a {
+    /* font-weight: bold; */
+}
+
+#margin li.current {
+    color: white;
+    /* font-weight: bold; */
+    background-color: #52679C;
+}
+
+#margin li.answered {
+    background:  transparent url("../images/tick.png") no-repeat 3px 8px;
+}
+
+#margin li.current.answered {
+    background:  #52679c url("../images/tick-inv.png") no-repeat 3px 8px;
+}
+
+.correct {
+    background:  transparent url("../images/correct.png") no-repeat 3px 8px;
+}
+
+.current.correct {
+    background:  #52679c url("../images/correct.png") no-repeat 3px 8px;
+}
+
+.wrong {
+    background:  transparent url("../images/cross.png") no-repeat 3px 8px;
+}
+
+.current.wrong {
+    background:  #52679c url("../images/cross.png") no-repeat 3px 8px;
+}
+
+#margin a:hover {
+    color: grey;
+}
+
+
+#iframe_wrapper {
+    width: 770px;
+    padding-right: 20px;
+    padding-left: 170px;
+}
+
+iframe {
+    width: 100%;
+    border: 0;
+}
+
+iframe#feedback {
+    margin-top: 10px;
+    border-top: 1px solid grey;
+}
+
+#answer_pane {
+    background-color: #eee;
+    border: 1px solid gray;    
+    margin-top: 30px;
+    padding: 0px 20px;
+    text-align: center;
+}
+
+#answer_pane span.buttonPane {
+   padding: 0px 20px;
+}
+
+#answer_pane button.current {
+   text-color: #52679c;
+   border: 1px solid black;
+}
+

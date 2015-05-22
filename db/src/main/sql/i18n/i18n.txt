@@ -1,0 +1,3 @@
+nl|Nederlands
+fr|Français
+en|English

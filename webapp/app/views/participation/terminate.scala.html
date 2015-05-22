@@ -1,0 +1,71 @@
+@* terminate.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(totalMarks: Int, maximumMarks: Int)
+
+@* Let the user acknowledge that he really wants to stop reading the feedback *@
+
+@stylesheets={
+   <link href='@routes.Assets.at("css/contest.css")' rel='stylesheet' type='text/css'/>
+}
+
+@scripts={
+   <script src='@routes.Assets.at("javascripts/jquery-1.8.3.min.js")' language="JavaScript"></script>
+   <script src='@routes.Assets.at("javascripts/countdown-clock.js")' language="JavaScript"></script>
+}
+
+@page("TTE",stylesheets=stylesheets,scripts=scripts){
+   <div id='banner_marks'>@totalMarks/@maximumMarks</div>
+   <div id='banner_title'>
+       <h1>@nlfren{Ben je echt klaar?}{Avez-vous vraiment fini?}{Are you really finished?}</h1>
+   </div>
+}{
+
+<div class="alert alert-warning">
+    @nlfren{
+    <p>Zodra je doorklikt naar de beginpagina van de website, kan je niet meer terug naar de pagina's met resultaten.
+    </p>
+    }{
+    <p>Une fois que vous retournez vers la page d'accueil du site, vous ne pouvez plus revenir aux pages de résultats.</p>
+    }{
+    <p>Once you go back to the homepage of the website, you cannot return to the pages of results.</p>
+    }
+</div>
+<div class="centered">
+   @buttonForm(action=routes.Participations.terminate()){
+      @nlfren{Ja, ik ben echt klaar}{Oui, j'ai vraiment fini}{Yes, I am really finished}
+   }
+   @buttonForm(action=routes.Participations.showFeedback(1)){
+    @nlfren{Nee, ik keer terug naar de resultaatpagina's}{Non, je retourne aux pages de résultats}{No, I'll go back to the feedback pages}
+   }
+</div>
+
+}

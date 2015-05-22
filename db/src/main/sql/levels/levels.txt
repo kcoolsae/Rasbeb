@@ -1,0 +1,12 @@
+1|nl|Ewok|Lager onderwijs (5e/6e leerjaar)
+2|nl|Wooki|Eerste graad secundair onderwijs
+3|nl|Padawan|Tweede graad secundair onderwijs
+4|nl|Jedi|Derde graad secundair onderwijs
+1|fr|Ewok|École primaire (5ième/6ième)
+2|fr|Wooki|École secondaire (1ière/2ième)
+3|fr|Padawan|École secondaire (3ième/4ième)
+4|fr|Jedi|École secondaire (5ième-7ième)
+1|en|Ewok|Primary school (5th/6th year)
+2|en|Wooki|Secondary school (1st/2nd year)
+3|en|Padawan|Secondary school (3rd/4th year)
+4|en|Jedi|Secondary school (5th/6th/7th year)

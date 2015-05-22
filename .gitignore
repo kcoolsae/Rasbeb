@@ -1,0 +1,14 @@
+etc/
+logs/
+project/
+target/
+.idea/
+.settings/
+.history/
+*.iml
+dev.conf
+test.conf
+prod.conf
+dev.hikaricp.properties
+prod.hikaricp.properties
+

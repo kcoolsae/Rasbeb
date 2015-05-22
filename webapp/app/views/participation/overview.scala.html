@@ -1,0 +1,84 @@
+@* overview.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(totalMarks: Int, maximumMarks: Int, list: Iterable[Participations.ShowClosedDetail])
+
+@* Show an overvuew of the results *@
+
+@* TODO: factor out common part with closed. *@
+
+@stylesheets={
+   <link href='@routes.Assets.at("css/contest.css")' rel='stylesheet' type='text/css'/>
+   <link href='@routes.Assets.at("css/tables.css")' rel='stylesheet' type='text/css'/>
+   <style>
+       td.marks { text-align: right; width: 10%; }
+   </style>
+}
+
+@page("TCL",stylesheets=stylesheets){
+   <div id='banner_marks'>@totalMarks/@maximumMarks</div>
+   <div id='banner_title'>
+       <h1>@nlfren{Uw resultaten}{Vos résultats}{Your results}</h1>
+   </div>
+}{
+@nlfren{
+<p>Je kan de resultaten van je proef in detail bekijken door te klikken in de lijst hieronder.
+    Je krijgt dan ook meer uitleg over de juiste antwoorden op de verschillende vragen.</p>
+}{
+<p>Vous pouvez consulter les résultats de votre test en détail en cliquant dans la liste ci-dessous.
+Vous obtiendrez également plus d'informations sur les réponses correctes aux différentes questions.</p>
+}{
+<p>You can view the results of your test in detail by clicking in the list below.
+     You will also receive an explanation of the correct answers to the various questions.</p>
+}
+
+<table class="data_table">
+    <thead>
+        <tr>
+            <th>@nlfren{Resultaat}{Résultat}{Result}</th>
+            <th>@nlfren{Titel}{Titre}{Title}</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach.tr(list) { detail =>
+            <td class="marks @detail.styleClass">@detail.marks/@detail.maximumMarks</td>
+            <td>
+                <a href="@routes.Participations.showFeedback(detail.index)">@detail.title</a>
+            </td>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th><th></th>
+        </tr>
+    </tfoot>
+</table>
+}
