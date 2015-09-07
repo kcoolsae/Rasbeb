@@ -89,17 +89,18 @@ public class ParticipationDAOImpl extends AbstractDAOImpl implements Participati
     }
 
     @Override
-    public Participation findClosedParticipation(int contestId, int level) {
+    public Participation findParticipationWithStatus(int contestId, int level, Status status) {
         try (PreparedStatement stat = prepareStatement(
                 "SELECT participation.id,participation.status,user_id,contest_id,lvl," +
                         "participation.lang,initial_marks,maximum_marks,total_marks," +
                         "extract (epoch from (deadline-now())), contest_type " +
                         "FROM participation JOIN contest ON contest_id = contest.id " +
-                        "WHERE user_id = ? AND contest_id = ? AND lvl = ? AND participation.status = " + Statuses.toInt(Status.CLOSED)
+                        "WHERE user_id = ? AND contest_id = ? AND lvl = ? AND participation.status = ?"
         )) {
             stat.setInt(1, context.getUserId());
             stat.setInt(2, contestId);
             stat.setInt(3, level);
+            stat.setInt(4, Statuses.toInt(status));
             try (ResultSet rs = stat.executeQuery()) {
                 if (rs.next()) {
                     return getParticipation(rs);

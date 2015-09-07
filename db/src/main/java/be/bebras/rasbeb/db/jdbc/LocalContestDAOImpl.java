@@ -81,7 +81,7 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
     public LocalContest getLocalContest(int id) {
         try (PreparedStatement stat = prepareStatement(
                 "SELECT id, status, title, comment, name, local_lang, contest_id, school_id, " +
-                        "contest_type, parent_status, level_id, true " +
+                        "contest_type, parent_status, level_id, NULL " +
                         "FROM local_contest_i18n WHERE id = ? AND lang = ?")) {
             stat.setInt(1, id);
             stat.setString(2, context.getLang());
@@ -130,11 +130,14 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
                 break;
         }
 
+        int p = rs.getInt(12);
+        Status participationStatus = rs.wasNull() ? null : Statuses.fromInt(p);
+
         return new LocalContest(
                 rs.getInt(1), lcStatus,
                 rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6),
                 rs.getInt(7), rs.getInt(8), rs.getInt(11),
-                rs.getBoolean(12)
+                participationStatus
         );
     }
 
@@ -153,7 +156,7 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
     public Iterable<LocalContest> listLocalContestsInSchool(int schoolId) {
         try (PreparedStatement stat = prepareStatement(
                 "SELECT id, status, title, comment, name, local_lang, contest_id, school_id, contest_type, " +
-                        "parent_status, level_id, true " +
+                        "parent_status, level_id, NULL " +
                         "FROM local_contest_i18n " +
                         "WHERE school_id = ? AND lang = ? ORDER BY title, comment")) {
             stat.setInt(1, schoolId);
@@ -332,7 +335,7 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
         try (PreparedStatement stat = prepareStatement(
                 "SELECT local_contest_i18n.id, local_contest_i18n.status, title, comment, name, " +
                         " local_lang, local_contest_i18n.contest_id, school_id, " +
-                        "contest_type, parent_status, level_id, participation.id IS NOT NULL " +
+                        "contest_type, parent_status, level_id, participation.status " +
                         "FROM local_contest_i18n " +
                         "JOIN contest_permission ON id = contest_permission.lc_id " +
                         "LEFT JOIN participation ON local_contest_i18n.contest_id = participation.contest_id " +

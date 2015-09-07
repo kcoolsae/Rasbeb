@@ -54,7 +54,7 @@ public class LocalContest {
 
     private int schoolId;
 
-    private boolean taken;
+    private Status participationStatus;
 
     public int getId() {
         return id;
@@ -76,7 +76,9 @@ public class LocalContest {
         return level;
     }
 
-    public int getLevelId() { return levelId; }
+    public int getLevelId() {
+        return levelId;
+    }
 
     public int getContestId() {
         return contestId;
@@ -91,12 +93,33 @@ public class LocalContest {
     }
 
     /**
-     * Whether this contest was already taken by the current user. Only filled in by certain queries.
+     * Returns the status of the participation by the current user. Only filled in by certain queries.
+     * Can be null.
      */
-    public boolean isTaken() { return taken; }
+    public Status getParticipationStatus() {
+        return participationStatus;
+    }
 
+
+    /**
+     * Convenience method. Checks whether a participation for this user exists,
+     */
+    public boolean isTakenByUser () {
+        return participationStatus != null;
+    }
+
+    /**
+     * Convenience method. Checks whether a participation for this user is already closed.
+     */
+    public boolean isFinishedByUser () {
+        return participationStatus == Status.CLOSED;
+    }
+
+    /*
+     * Constructor.
+     */
     public LocalContest(int id, LCStatus status, String title, String comment, String level,
-                        String lang, int contestId, int schoolId, int levelId, boolean taken) {
+                        String lang, int contestId, int schoolId, int levelId, Status participationStatus) {
         this.id = id;
         this.status = status;
         this.title = title;
@@ -106,6 +129,6 @@ public class LocalContest {
         this.contestId = contestId;
         this.schoolId = schoolId;
         this.levelId = levelId;
-        this.taken = taken;
+        this.participationStatus = participationStatus;
     }
 }

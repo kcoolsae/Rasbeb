@@ -43,21 +43,26 @@
           @nlfren{Nog niet open}{Pas encore ouvert}{Not yet open}
        }
        case LCStatus.OPEN => {
-          @if(lc.isTaken) {
+          @if(lc.isFinishedByUser) {
             @nlfren{Resultaten nog niet beschikbaar}{Résultats pas encore disponible}{Results not yet available}
           } else {
-            <a href="@routes.Participations.showLocalStart(lc.getId)">@nlfren{Deelnemen}{Participer}{Participate}</a>
+            @if(lc.isTakenByUser) {
+                @nlfren{Bezig}{En cours}{Running}
+                <a href="@routes.Participations.takeOverStart(lc.getId)">@nlfren{(overnemen)}{(prendre le contrôle)}{(take over)}</a>
+            } else {
+                <a href="@routes.Participations.showLocalStart(lc.getId)">@nlfren{Deelnemen}{Participer}{Participate}</a>
+            }
           }
        }
        case LCStatus.CLOSED => {
-          @if(lc.isTaken) {
+          @if(lc.isTakenByUser) {
               <a href="@routes.Participations.showOverview(lc.getId)">@nlfren{Resultaten}{Résultats}{Results}</a>
           } else {
             @nlfren{Reeds afgesloten}{Déjà fermé}{Already closed}
           }
        }
        case LCStatus.PENDING => {
-          @if(lc.isTaken) {
+          @if(lc.isTakenByUser) {
             @nlfren{Resultaten nog niet beschikbaar}{Résultats pas encore disponible}{Results not yet available}
           } else {
               @nlfren{Reeds afgesloten}{Déjà fermé}{Already closed}

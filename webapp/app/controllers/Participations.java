@@ -98,9 +98,9 @@ public class Participations extends Controller {
      * Starts (and activates) a local competition
      */
     @InjectContext
-    public static  Result startLocal(int id) {
+    public static Result startLocal(int id) {
         LocalContest lc = DataAccess.getInjectedContext().getLocalContestDAO().getLocalContest(id);
-        if (lc.getStatus() != LCStatus.OPEN)  {
+        if (lc.getStatus() != LCStatus.OPEN) {
             return badRequest();
         }
         createParticipation(lc.getContestId(), lc.getLevelId());
@@ -119,6 +119,39 @@ public class Participations extends Controller {
         session("stamp", Long.toHexString(new Date().getTime()));
     }
 
+    /**
+     * Show page which allows taking over a running participation
+     */
+    @InjectContext
+    public static Result takeOverStart(int lcId) {
+        LocalContest lc = DataAccess.getInjectedContext().getLocalContestDAO().getLocalContest(lcId);
+        if (lc.getStatus() != LCStatus.OPEN) {
+            return badRequest();
+        }
+        return ok(views.html.participation.takeover.render(lc));
+    }
+
+    /**
+     * Take over a running participation
+     */
+    @InjectContext
+    public static Result takeOver(int lcId) {
+        LocalContest lc = DataAccess.getInjectedContext().getLocalContestDAO().getLocalContest(lcId);
+        String str = session("part");
+        if (lc.getStatus() != LCStatus.OPEN || str != null) {
+            return badRequest();
+        }
+
+        ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
+        Participation participation = dao.findParticipationWithStatus(lc.getContestId(), lc.getLevelId(), be.bebras.rasbeb.db.data.Status.DEFAULT);
+        if (participation == null) {
+            return badRequest();
+        } else {
+            session("part", Integer.toString(participation.getId()));
+            session("stamp", Long.toHexString(new Date().getTime()));
+            return redirect(routes.Participations.showQuestion(1));
+        }
+    }
 
     /**
      * Transfer object for {@link #showQuestion}.
@@ -349,7 +382,7 @@ public class Participations extends Controller {
     /**
      * Show the page that acknowledges the local contest is finished.
      */
-    public static Result showLocalClosed () {
+    public static Result showLocalClosed() {
         return ok(views.html.participation.localClosed.render());
     }
 
@@ -424,7 +457,7 @@ public class Participations extends Controller {
      * Show an overview of the results of a local contest.
      */
     @InjectContext
-    public static Result showOverview (int lcId) {
+    public static Result showOverview(int lcId) {
         LocalContest lc = DataAccess.getInjectedContext().getLocalContestDAO().getLocalContest(lcId);
         if (lc.getStatus() != LCStatus.CLOSED) {
             // results are not yet available
@@ -433,7 +466,7 @@ public class Participations extends Controller {
         int contestId = lc.getContestId();
         int level = lc.getLevelId();
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
-        Participation part = dao.findClosedParticipation(contestId, level);
+        Participation part = dao.findParticipationWithStatus(contestId, level, be.bebras.rasbeb.db.data.Status.CLOSED);
         if (part == null) {
             badRequest();
         }
@@ -442,6 +475,6 @@ public class Participations extends Controller {
         session("feedback", Integer.toString(pid));
         List<ShowClosedDetail> result = getClosedDetails(pid, dao);
 
-        return  ok(views.html.participation.overview.render(part.getTotalMarks(), part.getMaximumMarks(), result));
+        return ok(views.html.participation.overview.render(part.getTotalMarks(), part.getMaximumMarks(), result));
     }
 }

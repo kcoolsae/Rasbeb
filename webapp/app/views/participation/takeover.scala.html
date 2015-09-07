@@ -1,0 +1,54 @@
+@* takeover.scala.html
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Copyright (C) 2015 Universiteit Gent
+ * 
+ * This file is part of the Rasbeb project, an interactive web
+ * application for Bebras competitions.
+ * 
+ * Corresponding author:
+ * 
+ * Kris Coolsaet
+ * Department of Applied Mathematics, Computer Science and Statistics
+ * Ghent University 
+ * Krijgslaan 281-S9
+ * B-9000 GENT Belgium
+ * 
+ * The Rasbeb Web Application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The Rasbeb Web Application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with the Degage Web Application (file LICENSE in the
+ * distribution).  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ *@
+
+@(lc: LocalContest)
+
+@user("TTO") {
+
+    <h2>@lc.getLevel - @lc.getTitle</h2>
+    <h3>@lc.getComment</h3>
+
+    <p>@nlfren{<b>Opgelet!</b> Het systeem denkt dat je met de wedstrijd bezig bent in een ander venster
+    of op een andere computer. Is dit <i>niet</i> zo, dan kan je door op onderstaande knop
+    te drukken de wedstrijd hier verderzetten.
+    }{ <b> Attention!</b> Le système pense que tu es actuellement on train de faire l'épreuve
+        dans une autre fenêtre
+         ou sur un autre ordinateur. Si tel est <i>pas</i> le cas,
+        tu peux continuer l' épreuve sur cet ordinateur-ci en appuyant sur le bouton ci-dessous.}{<b>Important!</b> The system thinks that you are currently doing the contest in a different window
+    or an a different computer. If that is <i>not</i> the case, then you can continue the contest
+        on this computer by pressing the button below.}
+    </p>
+     <div class="centered">
+    @buttonForm(action=routes.Participations.takeOver(lc.getId)){
+        @nlfren{Naar de wedstrijd}{Vers l'épreuve}{To the contest}
+    }
+    </div>
+}

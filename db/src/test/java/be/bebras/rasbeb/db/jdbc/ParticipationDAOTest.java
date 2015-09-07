@@ -138,16 +138,16 @@ public class ParticipationDAOTest extends ActivationDAOTest {
     @Test
     public void findParticipation() {
         context.setUserId(3);
-        Participation part = dao.findClosedParticipation(contestIds[0], 2);
+        Participation part = dao.findParticipationWithStatus(contestIds[0], 2, Status.CLOSED);
         assertNull (part);
         dao.closeParticipation(participationId[0]);
-        part = dao.findClosedParticipation(contestIds[0], 2);
+        part = dao.findParticipationWithStatus(contestIds[0], 2, Status.CLOSED);
         assertNotNull(part);
         assertEquals (participationId[0], part.getId());
-        part = dao.findClosedParticipation(contestIds[0], 3);
+        part = dao.findParticipationWithStatus(contestIds[0], 3, Status.CLOSED);
         assertNull(part);
         context.setUserId(2);
-        part = dao.findClosedParticipation(contestIds[0], 2);
+        part = dao.findParticipationWithStatus(contestIds[0], 2, Status.CLOSED);
         assertNull(part);
     }
 }

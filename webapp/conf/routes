@@ -139,6 +139,9 @@ GET     /part/overview          controllers.Participations.showOverview(id: Int)
 GET     /part/terminate         controllers.Participations.showTerminate()
 POST    /part/terminate         controllers.Participations.terminate()
 
+GET     /part/tostart/:id      controllers.Participations.takeOverStart(id: Int)
+GET     /part/to/:id      controllers.Participations.takeOver(id: Int)
+
 # Schools
 
 GET     /schools            controllers.Schools.list(f:SchoolsFilter ?= SchoolsFilter(null,null,null,null), s:Sorter ?= Sorter("NAME",true), p:Pager ?= Pager(0,10))

@@ -33,6 +33,7 @@ package be.bebras.rasbeb.db.dao;
 
 import be.bebras.rasbeb.db.data.Participation;
 import be.bebras.rasbeb.db.data.ParticipationDetail;
+import be.bebras.rasbeb.db.data.Status;
 
 import java.util.List;
 import java.util.Map;
@@ -93,10 +94,12 @@ public interface ParticipationDAO {
     public void closeParticipation (int id);
 
     /**
-     * Find the participation for the current user, contest and level.
-     * Only participations that were closed are returned. There should be at most one result.
+     * Find the participation for the current user, contest and level with the given status.
+     * Use {@link Status#CLOSED} or {@link Status#DEFAULT} (for running).
+     * There should be at most one result.
+     * @return the participation, or null when no result
      */
-    public Participation findClosedParticipation (int contestId, int level);
+    public Participation findParticipationWithStatus (int contestId, int level, Status status);
 
 
     public static class StudentMarks {
