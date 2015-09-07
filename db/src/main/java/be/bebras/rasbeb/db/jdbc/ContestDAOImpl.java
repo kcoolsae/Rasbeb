@@ -243,7 +243,7 @@ public class ContestDAOImpl extends AbstractDAOImpl implements ContestDAO {
 
     @Override
     public Iterable<ContestAvailableLevels> listPreviewableContests() {
-        return getLevelsAux("AND (contest_type=1 AND status <> 0) OR (contest_type=2 AND status=3)");
+        return getLevelsAux("AND ((contest_type=1 AND status <> 0) OR (contest_type=2 AND status=3))");
     }
 
     private Iterable<ContestAvailableLevels> getLevelsAux(String whereClause) {
