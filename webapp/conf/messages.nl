@@ -77,6 +77,8 @@ mail.noreply.address = Bebras online <no-reply@bebras.be>
 
 mail.registration.send.token = Registratie voor Bebras online
 mail.registration.user.exists = Onverwachte registratie voor Bebras online
+mail.reset.send.token = Nieuw wachtwoord kiezen
+
 
 # Contests
 contest.forced.closed = Sorry, maar je tijd was op. De proef werd automatisch afgesloten.

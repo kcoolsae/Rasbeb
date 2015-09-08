@@ -46,6 +46,7 @@ mail.noreply.address = Bebras online <no-reply@bebras.be>
 
 mail.registration.send.token = Registration for Bebras online
 mail.registration.user.exists = Unexpected registration for Bebras online
+mail.reset.send.token = Choose a new password
 
 # Contests
 contest.forced.closed = Sorry, but your time was up. The test has been terminated automatically.

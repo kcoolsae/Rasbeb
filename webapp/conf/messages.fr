@@ -86,6 +86,7 @@ mail.noreply.address = Bebras online <no-reply@bebras.be>
 
 mail.registration.send.token = Enregistrement pour Bebras online
 mail.registration.user.exists = Enregistrement inattendu pour Bebras online
+mail.reset.send.token = Choisir a nouveau mot de passe
 
 # Contests
 contest.forced.closed = Désolé, mais votre temps était écoulé. L''épreuve est terminée automatiquement.
