@@ -233,26 +233,25 @@ public class ContestDAOImpl extends AbstractDAOImpl implements ContestDAO {
 
     @Override
     public Iterable<ContestAvailableLevels> listAvailablePublicContests() {
-        return getLevelsAux("AND contest_type=0 AND status=2");
+        return getLevelsAux("AND contest_type=0 AND status=2 ORDER BY contest_id DESC, lvl ASC");
     }
 
     @Override
     public Iterable<ContestAvailableLevels> listOrganizableContests() {
-        return getLevelsAux("AND contest_type<>0 AND status <> 0");
+        return getLevelsAux("AND contest_type<>0 AND status <> 0 ORDER BY contest_id DESC, lvl ASC");
     }
 
     @Override
     public Iterable<ContestAvailableLevels> listPreviewableContests() {
-        return getLevelsAux("AND ((contest_type=1 AND status <> 0) OR (contest_type=2 AND status=3))");
+        return getLevelsAux("AND ((contest_type=1 AND status <> 0) OR (contest_type=2 AND status=3)) ORDER BY contest_id ASC, lvl ASC");
     }
 
-    private Iterable<ContestAvailableLevels> getLevelsAux(String whereClause) {
+    private Iterable<ContestAvailableLevels> getLevelsAux(String wherePlusOrderClause) {
 
         try (PreparedStatement stat = prepareStatement(
                 "SELECT contest_id,title,lvl,minutes,contest_type,status " +
                         "FROM contest_level_details  " +
-                        "WHERE frozen AND lang = ? " + whereClause +
-                        " ORDER BY contest_id,lvl"
+                        "WHERE frozen AND lang = ? " + wherePlusOrderClause
         )) {
             stat.setString(1, context.getLang());
             try (ResultSet rs = stat.executeQuery()) {

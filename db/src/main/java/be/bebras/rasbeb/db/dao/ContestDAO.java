@@ -104,12 +104,12 @@ public interface ContestDAO {
     /**
      * List the non-public contests that are frozen and therefore for which a local contest can
      * be constructed.  Only
-     * those from the current language are listed.
+     * those from the current language are listed. Listed most recent first.
      */
     public Iterable<ContestAvailableLevels> listOrganizableContests();
 
     /**
-     * List the contests that are previewable by teachers
+     * List the contests that are previewable by teachers. Listed oldest first.
      */
     public Iterable<ContestAvailableLevels> listPreviewableContests ();
 
