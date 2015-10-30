@@ -40,7 +40,7 @@ import be.bebras.rasbeb.db.data.QuestionI18n;
  */
 public interface QuestionDAO {
     
-    public static enum Field {
+    public enum Field {
         EXTERNAL_ID, TITLE
     }
 

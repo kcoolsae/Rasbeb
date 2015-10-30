@@ -33,6 +33,7 @@ package util.excel;
 
 import be.bebras.rasbeb.db.DataAccessContext;
 import be.bebras.rasbeb.db.DataAccessException;
+import be.bebras.rasbeb.db.dao.UserDAO;
 import be.bebras.rasbeb.db.data.Student;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.ss.usermodel.*;
@@ -53,11 +54,11 @@ public class SheetOfStudentInfo {
 
     // TODO: encapsulate the list of entries in an object removing the need for static methods
 
-    private static int countNonBlankCells (Row row) {
+    private static int countNonBlankCells(Row row) {
         int count = 0;
         int cellCount = row.getLastCellNum();
-        for (int i=0; i < cellCount; i++) {
-            Cell cell = row.getCell (i, Row.RETURN_BLANK_AS_NULL);
+        for (int i = 0; i < cellCount; i++) {
+            Cell cell = row.getCell(i, Row.RETURN_BLANK_AS_NULL);
             if (cell != null &&
                     cell.getCellType() == Cell.CELL_TYPE_STRING &&
                     !cell.getStringCellValue().trim().isEmpty()) {
@@ -67,22 +68,36 @@ public class SheetOfStudentInfo {
         return count;
     }
 
-    private static boolean cellStartsComment (Cell cell) {
+    private static boolean cellStartsComment(Cell cell) {
         if (cell == null || cell.getCellType() != Cell.CELL_TYPE_STRING)
             return false;
         String value = cell.getStringCellValue();
         return value != null && !value.isEmpty() && value.charAt(0) == '#';
     }
 
-    private static String getStringValueOrNull (Row row, int index) {
+    /** Returns a string value, even for numeric type strings.  */
+    private static String getStringValueOrNull(Row row, int index) {
         Cell cell = row.getCell(index, Row.RETURN_BLANK_AS_NULL);
-        if (cell != null && cell.getCellType() == Cell.CELL_TYPE_STRING) {
+        if (cell == null) {
+            return null;
+        } else if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
             return cell.getStringCellValue();
+        } else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            // TODO: use DataFormatter for this?
+            double value = cell.getNumericCellValue();
+            if (value == (long)value) {
+                return Long.toString ((long) value);
+            } else {
+                return Double.toString((long) value);
+            }
         } else {
-            return  null;
+            return null;
         }
     }
 
+    /**
+     * Reads student information which is present in the given spreadsheet
+     */
     public static List<StudentInClassOrError> read(File file) {
         try {
             Workbook workBook = WorkbookFactory.create(file);
@@ -94,9 +109,9 @@ public class SheetOfStudentInfo {
 
                 // ignore empty rows
                 if (countNonBlankCells(row) > 0) {
-                    Cell firstCell = row.getCell(0,Row.RETURN_BLANK_AS_NULL);
+                    Cell firstCell = row.getCell(0, Row.RETURN_BLANK_AS_NULL);
                     // ignore 'comment' lines
-                    if (! cellStartsComment(firstCell)) {
+                    if (!cellStartsComment(firstCell)) {
                         StudentInClassOrError data = new StudentInClassOrError();
 
                         data.setRowNumber(row.getRowNum() + 1);
@@ -120,22 +135,24 @@ public class SheetOfStudentInfo {
                         }
                         data.setFirstName(firstName);
 
-                        data.setEmail(getStringValueOrNull(row,3));
+                        data.setEmail(getStringValueOrNull(row, 3));
 
-                        String gender = getStringValueOrNull(row,4);
+                        String gender = getStringValueOrNull(row, 4);
                         if (gender != null && !gender.isEmpty()) {
                             // TODO: do not hard code language information
                             char firstChar = Character.toLowerCase(gender.charAt(0));
-                            if (firstChar=='m') {
+                            if (firstChar == 'm') {
                                 data.setMale(true);
-                            } else if (firstChar=='f' || firstChar=='v') {
-                                data.setMale (false);
+                            } else if (firstChar == 'f' || firstChar == 'v') {
+                                data.setMale(false);
                             } else {
                                 data.setErrorCode("spreadsheet.invalid.gender");
                             }
                         } else {
                             data.setErrorCode("spreadsheet.gender.empty");
                         }
+
+                        data.setBebrasId(getStringValueOrNull(row, 5));
                         result.add(data);
                     }
                 }
@@ -147,10 +164,16 @@ public class SheetOfStudentInfo {
         }
     }
 
-    private static boolean studentExists (StudentInClassOrError data, List<Student> list) {
+    /**
+     * Checks whether a student with exactly the same name occurs in the given list
+     *
+     * @param data Information to be checked for
+     * @param list List in which to search
+     */
+    private static boolean studentExists(StudentInClassOrError data, List<Student> list) {
         // TODO: also check bebras id
         for (Student student : list) {
-            if (student.getName().equalsIgnoreCase(data.getName() +", "+ data.getFirstName())) {
+            if (student.getName().equalsIgnoreCase(data.getName() + ", " + data.getFirstName())) {
                 return true;
             }
         }
@@ -161,50 +184,100 @@ public class SheetOfStudentInfo {
      * Checks the given list with a map of all classes and students currently in the database. Removes
      * data that corresponds to students that are already registered in this class.
      */
-    public static void checkList (List<StudentInClassOrError> list, Map<String,List<Student>> map) {
-       // TODO: remove existing records
+    public static void checkList(List<StudentInClassOrError> list, Map<String, List<Student>> map) {
         Iterator<StudentInClassOrError> iter = list.iterator();
         while (iter.hasNext()) {
             StudentInClassOrError data = iter.next();
-            if (! data.hasError()) {
+            if (!data.hasError()) {
                 List<Student> studentList = map.get(data.getClassCode());
                 if (studentList == null) {
-                    data.setErrorCode ("spreadsheet.unknown.class");
-                } else if (studentExists(data,studentList)) {
+                    data.setErrorCode("spreadsheet.unknown.class");
+                } else if (studentExists(data, studentList)) {
                     iter.remove();
                 }
             }
         }
     }
 
-    public static int countErrors (List<StudentInClassOrError> list) {
+    public static int countErrors(List<StudentInClassOrError> list) {
         int count = 0;
         for (StudentInClassOrError data : list) {
             if (data.hasError()) {
-                count ++;
+                count++;
             }
         }
         return count;
     }
 
-    public static void createStudent(DataAccessContext context, int schoolId, StudentInClassOrError data) {
+    /**
+     * Check whether the information about the student as retrieved from the database is compatible
+     * with the information stored in the spreadsheet. Stores an error if not compatible
+     */
+    private static boolean isCompatible (Student student, StudentInClassOrError data) {
 
-        // TODO: 4 database connections per student is a lot
+        if (! student.getName().equalsIgnoreCase(data.getName() + ", " + data.getFirstName())) {
+            data.setErrorCode("student.wrong.name");
+            return false;
+        }
+        if (data.getEmail() != null && ! student.getEmail().equalsIgnoreCase(data.getEmail())) {
+            data.setErrorCode("student.wrong.email");
+            return false;
+        }
+        if (data.getBebrasId() != null && ! student.getBebrasId().equalsIgnoreCase(data.getBebrasId())) {
+            data.setErrorCode("student.wrong.bebras");
+            return false;
+        }
+        if (data.isMale() != student.isMale()) {
+            data.setErrorCode("student.wrong.gender");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Registers the given student with the given class. If a student is known to the system,
+     * only his initial password is reset.
+     */
+    public static void registerStudent(DataAccessContext context, int schoolId, StudentInClassOrError data) {
+
+        // TODO: 5 database connections per student is a lot. Class/student map could contain class ids
+        int classId = context.getTeacherSchoolClassDAO().findClassInSchool(schoolId, data.getClassCode());
+
+        UserDAO dao = context.getUserDAO();
+
         data.setInitialPassword(PasswordGenerator.generate());
-        int studentId ;
+
+        String email = data.getEmail();
+        String bebrasId = data.getBebrasId();
+        if (email != null || bebrasId != null) {
+            // student may already exist in the database
+            Student student = dao.findStudent(email, bebrasId);
+            if (student != null) {
+                if (isCompatible(student, data)) {
+                    dao.resetInitialPassword(student.getId(), data.getInitialPassword());
+                    data.setBebrasId(student.getBebrasId());
+                    context.getTeacherSchoolClassDAO().addStudentToClass(student.getId(), classId);
+                    return; // registration finished
+                } else {
+                    return; // not registered
+                }
+            }
+        }
+
+        // this is a new student
+        int studentId;
         try {
-            studentId = context.getUserDAO().createStudent(
-                    data.getEmail(),
+            studentId = dao.createStudent(
+                    email,
                     data.getName() + ", " + data.getFirstName(),
                     data.isMale(),
                     data.getInitialPassword()
             );
         } catch (DataAccessException ex) {
             data.setErrorCode("student.not.created");
-            return; // not created
+            return; // not registered
         }
-        data.setBebrasId(context.getUserDAO().getUser(studentId).getBebrasId());
-        int classId = context.getTeacherSchoolClassDAO().findClassInSchool(schoolId, data.getClassCode());
+        data.setBebrasId(dao.getUser(studentId).getBebrasId());
         context.getTeacherSchoolClassDAO().addStudentToClass(studentId, classId);
     }
 
@@ -215,21 +288,20 @@ public class SheetOfStudentInfo {
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet();
-        sheet.setColumnWidth(1, 15*256);
-        sheet.setColumnWidth(3, 20*256);
-        sheet.setColumnWidth(4, 3*256);
+        sheet.setColumnWidth(1, 15 * 256);
+        sheet.setColumnWidth(3, 20 * 256);
+        sheet.setColumnWidth(4, 3 * 256);
         int count = 0;
 
         // Header row
         Row row = sheet.createRow(count);
 
 
-
         String[] strings = Messages.get("spreadsheet.header.info").split(",");
         for (int i = 0; i < strings.length; i++) {
             row.createCell(i).setCellValue(strings[i]);
         }
-        count ++;
+        count++;
 
         for (Map.Entry<String, List<Student>> entry : map.entrySet()) {
 
@@ -257,7 +329,7 @@ public class SheetOfStudentInfo {
         }
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            workbook.write (out);
+            workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
         } catch (IOException ex) {
             throw new RuntimeException("Could not create file to download", ex);

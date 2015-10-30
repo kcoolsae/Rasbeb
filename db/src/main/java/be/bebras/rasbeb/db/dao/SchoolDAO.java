@@ -39,7 +39,7 @@ import be.bebras.rasbeb.db.data.School;
  */
 public interface SchoolDAO {
 
-    public static enum Field {
+    public enum Field {
         NAME, STREET, ZIP, TOWN
     }
 

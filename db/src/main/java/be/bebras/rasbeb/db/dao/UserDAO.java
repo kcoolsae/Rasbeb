@@ -98,9 +98,21 @@ public interface UserDAO {
     public boolean hasAdministrator();
 
     /**
+     * Returns a student user with the given email address, or if that is null, with the
+     * give Bebras id. Returns null if such a user does not exist. Must not be called
+     * with two null arguments.
+     */
+    public Student findStudent (String email, String bebrasId);
+
+    /**
      * Create a student user.
      */
     public int createStudent (String email, String name, boolean male, String initialPassword);
+
+    /**
+     * Reset the password and initial password for an existing student user
+     */
+    public void resetInitialPassword (int studentId, String initialPassword);
 
     /**
      * Retrieve the data for a student user

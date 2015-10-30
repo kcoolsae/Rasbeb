@@ -73,6 +73,13 @@ spreadsheet.unknown.class = Unknown class (for this school)
 spreadsheet.header.info=##Class,Name,First name,Email address,M/F,Bebras ID,Password
 spreadsheet.header.marks=##Class,Name,First name,Score,Max
 
+student.not.created = Could not be registered
+
+student.wrong.name = Incorrect name
+student.wrong.email = Incorrect email
+student.wrong.gender = Incorrect gender
+student.wrong.bebras = Incorrect bebras ID
+
 # Teachers
 warning.no.school =  Before you can perform any actions you need to register yourself as responsible \
                      for at least one school

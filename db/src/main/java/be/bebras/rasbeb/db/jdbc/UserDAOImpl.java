@@ -64,7 +64,7 @@ class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
                 if (rs.next()) {
                     return new User(id, Status.DEFAULT,
                             rs.getString(1), rs.getString(2), Roles.fromInt(rs.getInt(3)),
-                            rs.getString(4) );
+                            rs.getString(4));
                 } else {
                     throw new KeyNotFoundException("User not found (with status active)", id);
                 }
@@ -86,7 +86,7 @@ class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
             stat.setString(1, email);
             stat.setInt(2, Roles.toInt(role));
             stat.setString(3, name);
-            stat.setString(4,context.getLang());
+            stat.setString(4, context.getLang());
             stat.setInt(5, context.getUserId());
             stat.executeUpdate();
             try (ResultSet rs = stat.getGeneratedKeys()) {
@@ -101,7 +101,7 @@ class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
         //
         try (PreparedStatement stat = prepareStatement(
                 "UPDATE general_user SET bebras_id = ?, who_modified=? WHERE id = ?")) {
-            stat.setString(1, Integer.toString(1000000 + 200 * id + 10*RG.nextInt(20) + Roles.toInt(role)));
+            stat.setString(1, Integer.toString(1000000 + 200 * id + 10 * RG.nextInt(20) + Roles.toInt(role)));
             stat.setInt(2, context.getUserId());
             stat.setInt(3, id);
             stat.executeUpdate();
@@ -130,14 +130,14 @@ class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
     }
 
     @Override
-    public void setPassword (String password) {
+    public void setPassword(String password) {
         setPassword(context.getUserId(), password);
     }
 
     /**
      * Code in common between {@link #findUserByBebrasId(String)} and {@link #findUserByEmail(String)}
      */
-    private User findUser (String whereClause, String value) {
+    private User findUser(String whereClause, String value) {
         try (PreparedStatement stat = prepareStatement(
                 "SELECT id, status, email, bebras_id, role, name FROM general_user " + whereClause)) {
             stat.setString(1, value);
@@ -187,7 +187,7 @@ class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
                                 rs.getString(2), rs.getString(3), Roles.fromInt(rs.getInt(4)),
                                 rs.getString(5));
                         // delete activation
-                        if (result.getEmail() != null && ! result.getEmail().isEmpty()) {
+                        if (result.getEmail() != null && !result.getEmail().isEmpty()) {
                             context.getActivationDAO().deleteToken(result.getEmail());
                         }
                         return result;
@@ -242,11 +242,24 @@ class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
         setPassword(id, initialPassword);
         try (PreparedStatement stat = prepareStatement(
                 "INSERT INTO student_user(id,male,initial_password) VALUES (?,?,?)")) {
-            stat.setInt (1, id);
-            stat.setBoolean (2, male);
-            stat.setString (3, initialPassword);
+            stat.setInt(1, id);
+            stat.setBoolean(2, male);
+            stat.setString(3, initialPassword);
             stat.executeUpdate();
             return id;
+        } catch (SQLException ex) {
+            throw convert(ex);
+        }
+    }
+
+    @Override
+    public void resetInitialPassword(int id, String initialPassword) {
+        setPassword(id, initialPassword);
+        try (PreparedStatement stat = prepareStatement(
+                "UPDATE student_user SET initial_password=? WHERE id=?")) {
+            stat.setString(1, initialPassword);
+            stat.setInt(2, id);
+            stat.executeUpdate();
         } catch (SQLException ex) {
             throw convert(ex);
         }
@@ -263,7 +276,7 @@ class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
                 if (rs.next()) {
                     return new Student(id, Status.DEFAULT,
                             rs.getString(1), rs.getString(2), rs.getString(3),
-                            rs.getBoolean(4), rs.getString(5) );
+                            rs.getBoolean(4), rs.getString(5));
                 } else {
                     throw new KeyNotFoundException("Student not found", id);
                 }
@@ -272,4 +285,40 @@ class UserDAOImpl extends AbstractDAOImpl implements UserDAO {
             throw convert(ex);
         }
     }
+
+    @Override
+    public Student findStudent(String email, String bebrasId) {
+        String whereClause;
+        String arg;
+        if (email != null) {
+            whereClause = "WHERE email = lower(trim(both from ?))";
+            arg = email;
+        } else if (bebrasId != null) {
+            whereClause = "WHERE bebras_id = lower(trim(both from ?))";
+            arg = bebrasId;
+        } else {
+            throw new IllegalArgumentException("email and bebrasId cannot both be null");
+        }
+
+        try (PreparedStatement stat = prepareStatement(
+                "SELECT id, email, bebras_id, name, male, initial_password FROM student " +
+                        whereClause + " AND status <> 0"
+        )) {
+            stat.setString (1, arg);
+            try (ResultSet rs = stat.executeQuery()) {
+                if (rs.next()) {
+                    return new Student(rs.getInt(1), Status.DEFAULT,
+                            rs.getString(2), rs.getString(3), rs.getString(4),
+                            rs.getBoolean(5), rs.getString(6));
+                } else {
+                    return null;
+                }
+            }
+
+        } catch (SQLException ex) {
+            throw convert(ex);
+        }
+
+    }
+
 }

@@ -184,7 +184,7 @@ public class TeacherSchools extends Controller {
                     if (! data.hasError()) {
                         try {
                             context.begin ();
-                            SheetOfStudentInfo.createStudent(context, ts.getSchoolId(), data);
+                            SheetOfStudentInfo.registerStudent(context, ts.getSchoolId(), data);
                             context.commit();
                         } finally {
                             context.rollback();

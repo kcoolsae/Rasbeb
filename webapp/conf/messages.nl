@@ -109,6 +109,13 @@ spreadsheet.unknown.class = Onbekende klas (voor deze school)
 spreadsheet.header.info=##Klas,Naam,Voornaam,E-mailadres,M/V,Bebras ID,Wachtwoord
 spreadsheet.header.marks=##Klas,Naam,Voornaam,Score,Max
 
+student.not.created = Kon niet geregistreerd worden
+
+student.wrong.name = Naam is niet correct
+student.wrong.email = Fout e-mailadres voor dit Bebras ID
+student.wrong.gender = Geslacht is niet correct
+student.wrong.bebras = Foute Bebras ID voor dit e-mailadres
+
 # Teachers
 warning.no.school =  Vooraleer je iets kunt doen op dit platform moet je je eerst als verantwoordelijke \
     registeren voor minstens één school.

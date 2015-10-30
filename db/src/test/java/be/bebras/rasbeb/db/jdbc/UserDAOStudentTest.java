@@ -55,47 +55,74 @@ public class UserDAOStudentTest extends DAOTest {
 
 
     @Before
-    public void getDAOAndInitFixtures () {
+    public void getDAOAndInitFixtures() {
         dao = context.getUserDAO();
         studentIds = Fixtures.createStudents(context);
     }
 
     @Test
-    public void studentAsUser () {
+    public void studentAsUser() {
         User user = dao.getUser(studentIds[0]);
-        assertEquals (studentIds[0], user.getId());
-        assertEquals (Status.DEFAULT, user.getStatus());
+        assertEquals(studentIds[0], user.getId());
+        assertEquals(Status.DEFAULT, user.getStatus());
         assertEquals("Doe, John", user.getName());
         assertEquals("student1@gmail.com", user.getEmail());
-        assertEquals (Role.STUDENT, user.getRole());
+        assertEquals(Role.STUDENT, user.getRole());
     }
 
     @Test
-    public void existingStudent () {
+    public void existingStudent() {
         Student student = dao.getStudent(studentIds[1]);
         assertEquals(studentIds[1], student.getId());
         assertEquals(Status.DEFAULT, student.getStatus());
         assertEquals("Doe, Jane", student.getName());
         assertEquals("student2@gmail.com", student.getEmail());
-        assertEquals (Role.STUDENT, student.getRole());
+        assertEquals(Role.STUDENT, student.getRole());
 
         assertEquals(false, student.isMale());
-        assertEquals ("initial2", student.getInitialPassword());
+        assertEquals("initial2", student.getInitialPassword());
     }
 
     @Test
-    public void canLoginWithInitialPassword () {
+    public void canLoginWithInitialPassword() {
 
-        User user = dao.getUser("student1@gmail.com", "initial1") ;
+        User user = dao.getUser("student1@gmail.com", "initial1");
         assertNotNull(user);
-        assertEquals (studentIds[0], user.getId());
+        assertEquals(studentIds[0], user.getId());
     }
 
     @Test
-    public void canLoginWithBebrasId () {
-        User user = dao.getUser (studentIds[2]);
-        user = dao.getUser(user.getBebrasId(), "initial3") ;
+    public void canLoginWithBebrasId() {
+        User user = dao.getUser(studentIds[2]);
+        user = dao.getUser(user.getBebrasId(), "initial3");
         assertNotNull(user);
-        assertEquals (studentIds[2], user.getId());
+        assertEquals(studentIds[2], user.getId());
+    }
+
+    @Test
+    public void foundByEmail() {
+        Student student = dao.findStudent("student1@gmail.com", "random");
+        assertNotNull(student);
+        assertEquals(studentIds[0], student.getId());
+        assertEquals("Doe, John", student.getName());
+    }
+
+    @Test
+    public void foundByBebrasId() {
+        String bebrasId = dao.getStudent(studentIds[1]).getBebrasId();
+        Student student = dao.findStudent(null, bebrasId);
+        assertNotNull(student);
+        assertEquals(studentIds[1], student.getId());
+        assertEquals("Doe, Jane", student.getName());
+    }
+
+    @Test
+    public void resetPassword() {
+        dao.resetInitialPassword(studentIds[0], "newpass");
+        User user = dao.getUser("student1@gmail.com", "newpass");
+        assertNotNull(user);
+        assertEquals(studentIds[0], user.getId());
+        Student student = dao.getStudent(studentIds[0]);
+        assertEquals("newpass", student.getInitialPassword());
     }
 }

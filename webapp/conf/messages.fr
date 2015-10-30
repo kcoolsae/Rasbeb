@@ -117,6 +117,13 @@ spreadsheet.unknown.class = Classe inconue (pour cette école)
 spreadsheet.header.info=##Classe,Nom,Prénom,Adresse e-mail,M/F,ID Bebras,Mot de passe
 spreadsheet.header.marks=##Classe,Nom,Prénom,Score,Max
 
+student.not.created = Ne pouvait pas être enregistré
+
+student.wrong.name = Nom incorrect
+student.wrong.email = Adresse e-mail incorrecte pour cet ID Bebras
+student.wrong.gender = Sexe incorrect
+student.wrong.bebras = Mauvais ID Bebras pour cette adresse e-mail
+
 yes = Oui
 no = Non
 yesno.true = Oui

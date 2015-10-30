@@ -59,7 +59,7 @@ public enum Role {
 
     private Set<Privilege> privileges;
 
-    private Role(Privilege... privileges) {
+    Role(Privilege... privileges) {
         this.privileges = EnumSet.noneOf(Privilege.class);
         Collections.addAll(this.privileges, privileges);
     }
