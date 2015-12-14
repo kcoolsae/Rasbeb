@@ -119,7 +119,7 @@ public class Contests extends Controller {
 
 
     /**
-     * Shows a contest and gives an overview of the corresponding contest sets. Allows contests to
+     * Shows a contest and gives an overview of the corresponding contest sets. Allows questions to
      * be added
      */
     @InjectContext

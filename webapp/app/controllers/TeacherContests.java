@@ -31,6 +31,7 @@
 
 package controllers;
 
+import be.bebras.rasbeb.db.DataAccessContext;
 import be.bebras.rasbeb.db.dao.ContestDAO;
 import be.bebras.rasbeb.db.dao.LocalContestDAO;
 import be.bebras.rasbeb.db.dao.TeacherSchoolClassDAO;
@@ -159,8 +160,9 @@ public class TeacherContests extends Controller {
         int contest_id = Integer.parseInt (parts[0]);
         int level = Integer.parseInt (parts[1]);
 
-        DataAccess.getInjectedContext().getLocalContestDAO().createLocalContestInSchool(
-            contest_id, level, DataAccess.getInjectedContext().getLang(), data.schoolId, data.comment
+        DataAccessContext context = DataAccess.getInjectedContext();
+        context.getLocalContestDAO().createLocalContestInSchool(
+            contest_id, level, context.getLang(), data.schoolId, data.comment
         );
 
         return redirect(routes.TeacherContests.list());

@@ -111,7 +111,7 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
             case DELETED:
                 lcStatus = LCStatus.DELETED;
                 break;
-            case DEFAULT:
+            case DEFAULT: // TODO: be more restrictive also for ContestType.RESTRICTED
                 if (type == ContestType.OFFICIAL && parentStatus != Status.ACTIVE) {
                     lcStatus = LCStatus.BLOCKED;
                 } else {
@@ -122,7 +122,7 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
                 lcStatus = LCStatus.OPEN;
                 break;
             case CLOSED:
-                if (type == ContestType.OFFICIAL && parentStatus != Status.CLOSED) {
+                if (type == ContestType.OFFICIAL && parentStatus != Status.CLOSED && parentStatus != Status.DELETED) {
                     lcStatus = LCStatus.PENDING;
                 } else {
                     lcStatus = LCStatus.CLOSED;
@@ -273,45 +273,6 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
             throw convert(ex);
         }
     }
-
-/*  REMOVED. This information is now contained inside LocalContest
-
-    @Override
-    public boolean canBeOpened(int lcId) {
-        try (PreparedStatement stat = prepareStatement(
-                "SELECT 1 FROM contest " +
-                        "JOIN local_contest ON contest.id = local_contest.contest_id " +
-                        "WHERE contest.contest_type = " + ContestTypes.toInt(ContestType.OFFICIAL) +
-                        " AND contest.status != " + Statuses.toInt(Status.ACTIVE) +
-                        " AND local_contest.id = ?" )) {
-            stat.setInt (1, lcId);
-            try (ResultSet rs = stat.executeQuery()) {
-                return ! rs.next();
-            }
-
-        } catch (SQLException ex) {
-            throw convert(ex);
-        }
-    }
-
-    @Override
-    public boolean isOfficiallyClosed(int lcId) {
-        try (PreparedStatement stat = prepareStatement(
-                "SELECT 1 FROM contest " +
-                        "JOIN local_contest ON contest.id = local_contest.contest_id " +
-                        "WHERE contest.contest_type = " + ContestTypes.toInt(ContestType.OFFICIAL) +
-                        " AND contest.status != " + Statuses.toInt(Status.CLOSED) +
-                        " AND local_contest.id = ?" )) {
-            stat.setInt (1, lcId);
-            try (ResultSet rs = stat.executeQuery()) {
-                return ! rs.next();
-            }
-
-        } catch (SQLException ex) {
-            throw convert(ex);
-        }
-    }
-*/
 
     @Override
     public void updateStatus(int lcId, Status status) {

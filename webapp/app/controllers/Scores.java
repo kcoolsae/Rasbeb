@@ -56,6 +56,7 @@ public class Scores extends Controller {
     public static Result start() {
 
         // TODO: what if there are no contests to be shown?
+        // TODO: also show official contests from previous years.
         return ok(views.html.results.start.render(
                 new Form<>(Data.class),
                 TeacherContests.getPreviewableContestLevels(),
