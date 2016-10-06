@@ -142,7 +142,6 @@ public class TeacherContests extends Controller {
             for (Boolean available : cals.available) {
                 levels += available ? "+" : "-";
             }
-            System.out.println("Levels = " + levels);
         }
     }
 
