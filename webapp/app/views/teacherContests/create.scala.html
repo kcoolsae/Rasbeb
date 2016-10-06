@@ -1,86 +1,95 @@
 @* create.scala.html
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Copyright (C) 2015 Universiteit Gent
- * 
- * This file is part of the Rasbeb project, an interactive web
- * application for Bebras competitions.
- * 
- * Corresponding author:
- * 
- * Kris Coolsaet
- * Department of Applied Mathematics, Computer Science and Statistics
- * Ghent University 
- * Krijgslaan 281-S9
- * B-9000 GENT Belgium
- * 
- * The Rasbeb Web Application is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * The Rasbeb Web Application is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License
- * along with the Degage Web Application (file LICENSE in the
- * distribution).  If not, see <http://www.gnu.org/licenses/>.
- * 
- *@
+* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Copyright (C) 2015 Universiteit Gent
+*
+* This file is part of the Rasbeb project, an interactive web
+* application for Bebras competitions.
+*
+* Corresponding author:
+*
+* Kris Coolsaet
+* Department of Applied Mathematics, Computer Science and Statistics
+* Ghent University
+* Krijgslaan 281-S9
+* B-9000 GENT Belgium
+*
+* The Rasbeb Web Application is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* The Rasbeb Web Application is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with the Degage Web Application (file LICENSE in the
+* distribution). If not, see <http://www.gnu.org/licenses/>.
+*
+*@
+@(f: Form[TeacherContests.Data], contestInfos: Iterable[TeacherContests.ContestInfo], infos: Iterable[TeacherSchoolClassDAO.TeacherSchoolInfo])
 
-@(f: Form[TeacherContests.Data], contestLevels : Iterable[TeacherContests.ContestLevel], infos: Iterable[TeacherSchoolClassDAO.TeacherSchoolInfo])
-
-@stylesheets={
-<link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
-<style>span.disabled { text-decoration: line-through; color: grey;} </style>
+@stylesheets = {
+    <link href='@routes.Assets.at("css/tables.css")' rel="stylesheet" type="text/css"/>
+    <style>span.disabled {
+        text-decoration: line-through;
+        color: grey;
+    } </style>
 }
 
-@user("CLC", stylesheets=stylesheets) {
+@user("CLC", stylesheets = stylesheets) {
 
-<h2>@nlfren{Maak een lokale wedstrijd aan}{Créer un concours local}{Create a local competition}</h2>
+    <h2>@nlfren {Maak een lokale wedstrijd aan} {Créer un concours local} {Create a local competition}</h2>
 
-@form(action=routes.TeacherContests.createNew){
+    <form action="@routes.TeacherContests.createNew" method="POST">
 
-@defining(f("contest")){ field =>
-<tr>
-    <td class="label">
-     <label for="@field.id">@nlfren{Niveau - wedstrijd}{Niveau - concours}{Level - contest}
-     </label>
-    </td>
-    <td>
-        <select name="@field.name" id="@field.id">
-            @foreach(contestLevels){ cl =>
-                @option(field.value,cl.contestId+":"+cl.levelId){
-                    @cl.levelName - @cl.title
+        @defining(f("contestId")) { field =>
+            <h3>1. @nlfren{Kies een wedstrijd}{Choisir un concours}{Choose a competition}</h3>
+            @if(field.hasErrors) {
+                <p><span class="text-danger">@Messages("error.chooseone")</span></p>
+            }
+            @foreach(contestInfos) { cl =>
+                <p><input type="radio" name="@field.name" id="@field.id"
+                          value="@cl.contestId" @if(field.value == cl.contestId.toString) {checked="checked"}
+       @* Maybe later: currently all contests have all levels available
+                    onchange="adjustLevels('+@cl.levels+');"  *@
+                >
+                @cl.title</input></p>
+            }
+        }
+
+        @defining(f("level")) { field =>
+            <h3>2. @nlfren{Kies een moelijkheidsgraad}{Choisir un niveau de difficulté}{Choose a level of difficulty}</h3>
+            @if(field.hasErrors) {
+                <p><span class="text-danger">@Messages("error.chooseone")</span></p>
+            }
+            @foreach(db.DataAccess.getLevels) { lvl =>
+                <p><input type="radio" name="@field.name" id="@field.id"
+                          value="@lvl.getLevel" @if(field.value == lvl.getLevel.toString) {checked="checked"}>
+                    @lvl.getDescription (@lvl.getName)</input></p>
+            }
+        }
+
+        <h3>3. @nlfren{Bijkomende gegevens}{Données suplémentaires}{Additional data}</h3>
+        <p>@defining(f("schoolId")) { field =>
+            <label for="@field.id">@nlfren {School} {École} {School}</label>
+            <select name="@field.name" id="@field.id">
+            @foreach(infos) { info =>
+                @option(field.value, info.schoolId.toString) {
+                    @info.name
                 }
             }
-        </select>
-    </td>
-</tr>
-}
-
-@nlfren{
-    @selectSchool(f("schoolId"), "School", infos)
-    @inputText(f("comment"), '_label -> "Beschrijving, bijv.: Donderdag - 3a & 3b")
-    @submitButton("Aanmaken")
-}{
-    @selectSchool(f("schoolId"), "École", infos)
-    @inputText(f("comment"), '_label -> "Description, par ex.: Jeudi - 3a & 3b")
-    @submitButton("Créer")
-}{
-    @selectSchool(f("schoolId"), "School", infos)
-    @inputText(f("comment"), '_label -> "Description, e.g., Thursday - 3a & 3b ")
-    @submitButton("Create")
-}
-
-}
-
-<p class="footnote">
-@*       @nlfren{Moeilijkheidsgraden:}{Niveaux de difficulté:}{Levels of difficulty:} *@
-       @foreach(db.DataAccess.getLevels){ lvl =>
-           <b>@lvl.getName:</b> @lvl.getDescription
-       }
-</p>
+            </select>
+        }</p>
+        <p>@defining(f("comment")) { field =>
+            @if(field.hasErrors) {
+                <p><span class="text-danger">@Messages("error.required")</span></p>
+            }
+            <label for="@field.id">@nlfren {Beschrijving, bijv.: Donderdag - 3a & 3b} {Description, par ex.: Jeudi - 3a & 3b} {Description, e.g., Thursday - 3a & 3b}</label>
+            <input type="text" name="@field.name" value="@field.value">
+        }</p>
+        <p><input type="submit" value="@nlfren {Aanmaken} {Créer} {Create}"></p>
+    </form>
 }
 

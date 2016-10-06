@@ -44,11 +44,13 @@ import db.DataAccess;
 import db.InjectContext;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.data.validation.Constraints;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import views.html.teacherContests.*;
 
+import javax.validation.Constraint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,19 +82,10 @@ public class TeacherContests extends Controller {
             result.add(li);
         }
         return ok(list.render(
-                        result,
-                        DataAccess.getInjectedContext().getContestDAO().listPreviewableContests()
+                result,
+                DataAccess.getInjectedContext().getContestDAO().listPreviewableContests()
                 )
         );
-    }
-
-    /**
-     * Data to be used to create a new local competition
-     */
-    public static class Data {
-        public String contest;
-        public String comment;
-        public int schoolId;
     }
 
     /**
@@ -113,7 +106,7 @@ public class TeacherContests extends Controller {
         return getLevelsAux(DataAccess.getInjectedContext().getContestDAO().listPreviewableContests());
     }
 
-    private static Iterable<ContestLevel> getLevelsAux (Iterable<ContestDAO.ContestAvailableLevels> list) {
+    private static Iterable<ContestLevel> getLevelsAux(Iterable<ContestDAO.ContestAvailableLevels> list) {
         ArrayList<ContestLevel> result = new ArrayList<>();
         for (ContestDAO.ContestAvailableLevels a : list) {
             for (Level level : DataAccess.getLevels()) {
@@ -133,15 +126,63 @@ public class TeacherContests extends Controller {
     }
 
     /**
+     * Contains some information about a particular contest and the levels it supports. Can be
+     * used in a two step selection. (Contest - Level)
+     */
+    public static class ContestInfo {
+        public String title;
+        public int contestId;
+        public String levels; // of the form "+-++", indexed by levelId-1
+
+        public ContestInfo(ContestDAO.ContestAvailableLevels cals) {
+            this.title = cals.title;
+            this.contestId = cals.contestId;
+
+            levels = "";
+            for (Boolean available : cals.available) {
+                levels += available ? "+" : "-";
+            }
+            System.out.println("Levels = " + levels);
+        }
+    }
+
+    private static Result showNewAux(Form<Data> form) {
+
+        List<ContestInfo> list = new ArrayList<>();
+        for (ContestDAO.ContestAvailableLevels cals : DataAccess.getInjectedContext().getContestDAO().listOrganizableContests()) {
+            list.add(new ContestInfo(cals));
+        }
+
+        return ok(create.render(form,
+                list,
+                DataAccess.getInjectedContext().getTeacherSchoolClassDAO().listSchoolInfoShort()
+        ));
+    }
+
+    /**
      * Show page that allows creation of a local competition
      */
     @InjectContext
     public static Result showNew() {
+        return showNewAux(new Form<>(Data.class));
+    }
 
-        return ok(create.render(new Form<>(Data.class),
-                getOrganizableContestLevels(),
-                DataAccess.getInjectedContext().getTeacherSchoolClassDAO().listSchoolInfoShort()
-        ));
+    /**
+     * Data to be used to create a new local competition
+     */
+    public static class Data {
+        // constraint does not work on primitive type?
+        @Constraints.Required
+        public int contestId;
+
+        // constraint does not work on primitive type?
+        @Constraints.Required
+        public int level;
+
+
+        @Constraints.Required
+        public String comment;
+        public int schoolId;
     }
 
     /**
@@ -149,23 +190,24 @@ public class TeacherContests extends Controller {
      */
     @InjectContext
     public static Result createNew() {
-
-        Data data = new Form<>(Data.class).bindFromRequest().get();
-        // TODO: check whether schoolid and userId conform
-        String[] parts = data.contest.split(":");
-        if (parts.length != 2) {
-            return badRequest();
+        Form<Data> form = new Form<>(Data.class).bindFromRequest();
+        if (form.hasErrors()) {
+            return showNewAux(form);
         }
-
-        int contest_id = Integer.parseInt (parts[0]);
-        int level = Integer.parseInt (parts[1]);
-
-        DataAccessContext context = DataAccess.getInjectedContext();
-        context.getLocalContestDAO().createLocalContestInSchool(
-            contest_id, level, context.getLang(), data.schoolId, data.comment
-        );
-
-        return redirect(routes.TeacherContests.list());
+        Data data = form.get();
+        if (data.contestId == 0) { // standard validation does not work?
+            form.reject("contestId", "error.chooseone");
+            return showNewAux(form);
+        } else if (data.level == 0) { // standard validation does not work?
+            form.reject("level", "error.chooseone");
+            return showNewAux(form);
+        } else {
+            DataAccessContext context = DataAccess.getInjectedContext();
+            context.getLocalContestDAO().createLocalContestInSchool(
+                    data.contestId, data.level, context.getLang(), data.schoolId, data.comment
+            );
+            return redirect(routes.TeacherContests.list());
+        }
     }
 
     /**
@@ -180,7 +222,7 @@ public class TeacherContests extends Controller {
     }
 
     public static class ManageData {
-        public Map<Integer,Integer> boxes = new HashMap<>(); // obligatory!
+        public Map<Integer, Integer> boxes = new HashMap<>(); // obligatory!
         public String action;
     }
 
@@ -203,28 +245,28 @@ public class TeacherContests extends Controller {
         } else {
             return badRequest();
         }
-        return redirect (routes.TeacherContests.start(lcId));
+        return redirect(routes.TeacherContests.start(lcId));
     }
 
     /**
      * Set/revoke permissions for all pupils in a given class.
      */
     @InjectContext
-    public static Result grouped (int lcId, String classId) {
+    public static Result grouped(int lcId, String classId) {
         String action = new DynamicForm().bindFromRequest().get("action");
         LocalContestDAO dao = DataAccess.getInjectedContext().getLocalContestDAO();
         if (action.equalsIgnoreCase("grant")) {
-            dao.grantPermissionToClass(lcId,classId);
+            dao.grantPermissionToClass(lcId, classId);
         } else if (action.equalsIgnoreCase("revoke")) {
-            dao.removePermissionFromClass(lcId,classId);
+            dao.removePermissionFromClass(lcId, classId);
         } else {
             return badRequest();
         }
-        return redirect (routes.TeacherContests.start(lcId));
+        return redirect(routes.TeacherContests.start(lcId));
     }
 
     @InjectContext
-    public static Result changeStatus (int lcId, int s) {
+    public static Result changeStatus(int lcId, int s) {
         LocalContestDAO dao = DataAccess.getInjectedContext().getLocalContestDAO();
         be.bebras.rasbeb.db.data.Status status = Statuses.fromInt(s);
         LocalContest localContest = dao.getLocalContest(lcId);

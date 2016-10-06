@@ -32,6 +32,8 @@ caption.logout = Log out
 message.not.logged.in = Not logged in
 bebras.id = Bebras ID
 
+error.chooseone=You have to make a choice
+
 # data tables
 table.pre.show = Show
 table.pre.rows = rows

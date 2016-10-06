@@ -37,6 +37,7 @@ constraint.required=Champ obligatoire
 error.required=Le champ ne peut être vide.
 error.passwords.differ=Les deux mots de passe doivent être identiques.
 error.extendedemail=Adresse email invalide.
+error.chooseone=Vous devez faire un choix
 
 # Other errors
 

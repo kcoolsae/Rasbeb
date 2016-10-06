@@ -37,6 +37,7 @@ constraint.required=Verplicht veld.
 error.required=Het veld mag niet leeg zijn.
 error.passwords.differ=Beide wachtwoorden moeten dezelfde zijn.
 error.extendedemail=Ongeldig e-mailadres
+error.chooseone=Je moet een keuze maken
 
 # Other errors
 
