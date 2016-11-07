@@ -121,19 +121,19 @@ public class SheetOfStudentInfo {
                             data.setErrorCode("spreadsheet.classcode.empty");
                             continue;
                         }
-                        data.setClassCode(classCode);
+                        data.setClassCode(classCode.trim());
 
                         String name = getStringValueOrNull(row, 1);
                         if (name == null || name.trim().isEmpty()) {
                             data.setErrorCode("spreadsheet.name.empty");
                         }
-                        data.setName(name);
+                        data.setName(name.trim());
 
                         String firstName = getStringValueOrNull(row, 2);
                         if (firstName == null || firstName.trim().isEmpty()) {
                             data.setErrorCode("spreadsheet.firstname.empty");
                         }
-                        data.setFirstName(firstName);
+                        data.setFirstName(firstName.trim());
 
                         data.setEmail(getStringValueOrNull(row, 3));
 
