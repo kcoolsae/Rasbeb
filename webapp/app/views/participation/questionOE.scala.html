@@ -32,7 +32,7 @@
  @(q: Question, arg: Participations.ShowQuestionArg)
 
  @question(q,arg){
- <input type="text" name="answer" value="@arg.detail.getAnswer">
+ <input type="text" name="answer" value="@arg.detail.getAnswer" autocomplete="off">
  @nlfren{(leeg = geen antwoord)}{(vide = pas de réponse)}{(empty = no answer)}
  <button>@nlfren{Versturen}{Envoyer}{Submit}</button>
  }
