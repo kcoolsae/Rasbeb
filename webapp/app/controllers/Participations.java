@@ -31,6 +31,7 @@
 
 package controllers;
 
+import be.bebras.rasbeb.db.dao.LocalContestDAO;
 import be.bebras.rasbeb.db.dao.ParticipationDAO;
 import be.bebras.rasbeb.db.dao.QuestionSetDAO;
 import be.bebras.rasbeb.db.data.*;
@@ -52,24 +53,28 @@ import java.util.List;
 public class Participations extends Controller {
 
     /**
-     * Shows the page with the start button
-     *
-     * @param id contest id
+     * Shows the page with the start button. Intended for anonymous contests only
      */
     @InjectContext
     public static Result showStart(int id, int level) {
 
         Contest contest = DataAccess.getInjectedContext().getContestDAO().getContest(id);
+        if (contest.getType() != ContestType.PUBLIC) {
+            return badRequest();
+        }
         Level lvl = DataAccess.getInjectedContext().getLevelDAO().getLevel(level);
         int minutes = DataAccess.getInjectedContext().getContestDAO().getDuration(id, level);
         return ok(views.html.participation.show.render(contest, lvl, minutes));
     }
 
     /**
-     * Shows the page with the start button (for a local competition)
+     * Shows the page with the start button (for a local competition). Users must be logged in to see this page.
      */
     @InjectContext
     public static Result showLocalStart(int lcId) {
+        if (CurrentUser.isLoggedOut()) {
+            return redirect(routes.Authentication.loginForm()); // log in
+        }
         LocalContest lc = DataAccess.getInjectedContext().getLocalContestDAO().getLocalContest(lcId);
         if (lc.getStatus() != LCStatus.OPEN) {
             // not open!
@@ -81,7 +86,7 @@ public class Participations extends Controller {
 
 
     /**
-     * Starts (and activates) the competition
+     * Starts (and activates) the competition. Intended for public contests only
      */
     @InjectContext
     public static Result start(int id, int level) {
@@ -90,21 +95,28 @@ public class Participations extends Controller {
             createParticipation(id, level);
             return redirect(routes.Participations.showQuestion(1));
         } else {
-            return badRequest(); // kan anders gebruikt worden om wedstrijden te vroeg te zien
+            return badRequest(); // avoid illegal preview of questions
         }
     }
 
     /**
-     * Starts (and activates) a local competition
+     * Starts (and activates) a local competition.
      */
     @InjectContext
     public static Result startLocal(int id) {
-        LocalContest lc = DataAccess.getInjectedContext().getLocalContestDAO().getLocalContest(id);
-        if (lc.getStatus() != LCStatus.OPEN) {
+        if (CurrentUser.isLoggedOut()) {
+            return redirect(routes.Authentication.loginForm()); // log in
+        }
+        LocalContestDAO dao = DataAccess.getInjectedContext().getLocalContestDAO();
+        LocalContest lc = dao.getLocalContest(id);
+        // check whether current user is allowed to take this local competition
+        if (lc.getStatus() == LCStatus.OPEN && dao.hasPermission(lc.getId())) {
+            createParticipation(lc.getContestId(), lc.getLevelId());
+            return redirect(routes.Participations.showQuestion(1));
+        } else {
             return badRequest();
         }
-        createParticipation(lc.getContestId(), lc.getLevelId());
-        return redirect(routes.Participations.showQuestion(1));
+
     }
 
     private static void createParticipation(int contestId, int level) {

@@ -48,4 +48,11 @@ public final class CurrentUser {
         return roleString != null && Role.valueOf(roleString) == role;
     }
 
+    /**
+     * Whether the current user is logged in
+     */
+    public static boolean isLoggedOut () {
+        return Controller.session("id") == null;
+    }
+
 }

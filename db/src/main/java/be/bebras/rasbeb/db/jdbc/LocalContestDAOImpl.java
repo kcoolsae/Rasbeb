@@ -198,11 +198,11 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
     }
 
     @Override
-    public boolean hasPermission(int lcId, int studentId) {
+    public boolean hasPermission(int lcId) {
         try (PreparedStatement stat = prepareStatement(
                 "SELECT 1 FROM contest_permission WHERE lc_id=? AND userId=?")) {
             stat.setInt(1, lcId);
-            stat.setInt(2, studentId);
+            stat.setInt(2, context.getUserId());
             try (ResultSet rs = stat.executeQuery()) {
                 return rs.next();
             }

@@ -82,10 +82,10 @@ public interface LocalContestDAO {
     public void removePermissionFromClass (int lcId, String className);
 
     /**
-     * Check whether a permission record is present for the given local contest and studentId.
+     * Check whether a permission record is present for the given local contest and the current user.
      * Further checks need to be done to make sure that the user can participate in the contest.
      */
-    public boolean hasPermission (int lcId, int studentId);
+    public boolean hasPermission (int lcId);
 
     public static class StudentPermission {
         public int studentId;

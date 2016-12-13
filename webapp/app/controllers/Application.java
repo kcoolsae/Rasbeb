@@ -71,8 +71,7 @@ public class Application extends Controller {
             return redirect(routes.Participations.showFeedback(1));
         }
 
-        if (session("id") == null) {
-            // not logged in
+        if (CurrentUser.isLoggedOut()) {
             return redirect(routes.Application.home());
         }
 
