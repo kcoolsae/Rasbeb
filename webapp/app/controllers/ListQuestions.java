@@ -34,9 +34,11 @@ package controllers;
 import be.bebras.rasbeb.db.Filter;
 import be.bebras.rasbeb.db.dao.QuestionDAO;
 import be.bebras.rasbeb.db.data.Question;
+import be.bebras.rasbeb.db.data.Role;
 import bindings.Pager;
 import bindings.QuestionsFilter;
 import bindings.Sorter;
+import db.CurrentUser;
 import db.DataAccess;
 import db.InjectContext;
 import play.data.Form;
@@ -56,6 +58,9 @@ public class ListQuestions extends Controller {
      */
     @InjectContext
     public static Result list(QuestionsFilter sf, Sorter sorter, Pager pager) {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
         QuestionDAO dao = DataAccess.getInjectedContext().getQuestionDAO();
         Filter<QuestionDAO.Field> filter = dao.createListQuestionsFilter();
         filter.fieldContains(EXTERNAL_ID, sf.externalId());

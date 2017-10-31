@@ -35,6 +35,8 @@ import be.bebras.rasbeb.db.dao.QuestionDAO;
 import be.bebras.rasbeb.db.data.Language;
 import be.bebras.rasbeb.db.data.Question;
 import be.bebras.rasbeb.db.data.QuestionI18n;
+import be.bebras.rasbeb.db.data.Role;
+import db.CurrentUser;
 import db.DataAccess;
 import db.InjectContext;
 import play.data.Form;
@@ -68,6 +70,9 @@ public class Questions extends Controller {
      */
     @InjectContext
     public static Result updateExternalId(int id) {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
         QuestionDAO dao = DataAccess.getInjectedContext().getQuestionDAO();
 
         Form<EIData> f = new Form<>(EIData.class).bindFromRequest();
@@ -90,6 +95,9 @@ public class Questions extends Controller {
      */
     @InjectContext
     public static Result updateNumberOfAnswers (int id) {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
         QuestionDAO dao = DataAccess.getInjectedContext().getQuestionDAO();
 
         Form<NAData> f = new Form<>(NAData.class).bindFromRequest();
@@ -165,8 +173,11 @@ public class Questions extends Controller {
      */
     @InjectContext
     public static Result preview(int id) {
-        // TODO: current user must be an organizer.
-        // TeacherSchools can only see questions that have been assigned to (public) competitions.
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
+        // TODO: the above is possibly too restrictive
+        // Teachers can only see questions that have been assigned to (public) competitions.
 
         QuestionDAO dao = DataAccess.getInjectedContext().getQuestionDAO();
         PreviewArg arg = new PreviewArg();
@@ -204,6 +215,9 @@ public class Questions extends Controller {
 
     @InjectContext
     public static Result updateI18n(int id, String lang) {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
 
         // handle normal fields
         Form<I18nData> f = new Form<>(I18nData.class).bindFromRequest();
@@ -245,6 +259,9 @@ public class Questions extends Controller {
      */
     @InjectContext
     public static Result showNew() {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
 
         // note: there is no use doing this in the constructor...
         Data initial = new Data();
@@ -258,6 +275,9 @@ public class Questions extends Controller {
      */
     @InjectContext
     public static Result createNew() {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
 
         Form<Data> f = new Form<>(Data.class).bindFromRequest();
         if (f.hasErrors()) {

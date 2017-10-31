@@ -40,6 +40,7 @@ import be.bebras.rasbeb.db.data.*;
 import bindings.Pager;
 import bindings.QuestionsFilter;
 import bindings.Sorter;
+import db.CurrentUser;
 import db.DataAccess;
 import db.InjectContext;
 import play.data.Form;
@@ -75,6 +76,9 @@ public class Contests extends Controller {
 
     @InjectContext
     public static Result showNew() {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
         Data data = new Data();
         data.type = ContestType.RESTRICTED.name();
         Form<Data> f = new Form<>(Data.class).fill(data);
@@ -84,6 +88,9 @@ public class Contests extends Controller {
 
     @InjectContext
     public static Result createNew() {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
 
         Form<Data> f = new Form<>(Data.class).bindFromRequest();
         if (f.hasErrors()) {
@@ -124,6 +131,9 @@ public class Contests extends Controller {
      */
     @InjectContext
     public static Result show(int id, QuestionsFilter f, Sorter s, Pager p) {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
 
         ContestDAO dao = DataAccess.getInjectedContext().getContestDAO();
         Contest contest = dao.getContest(id);
@@ -220,6 +230,9 @@ public class Contests extends Controller {
      */
     @InjectContext
     public static Result adjustMarks(int id) {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
 
         // TODO: error messages for invalid marks (negative correct, positive wrong...)
 
@@ -253,6 +266,9 @@ public class Contests extends Controller {
      */
     @InjectContext
     public static Result showForSorting (int id) {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
         DataAccessContext context = DataAccess.getInjectedContext();
         Iterable<QuestionSetDAO.QuestionWithMarks> qlist = context.getQuestionSetDAO().listQuestionsWithMarks(id);
         List<String> slist = new ArrayList<>();
@@ -287,6 +303,9 @@ public class Contests extends Controller {
      */
     @InjectContext
     public static  Result swap (int id) {
+        if (! CurrentUser.hasRole(Role.ORGANIZER)) {
+            return badRequest();
+        }
 
         Swaps swapsData = new Form<>(Swaps.class).bindFromRequest().get();
         int[] indices = swapsData.getIndices();
