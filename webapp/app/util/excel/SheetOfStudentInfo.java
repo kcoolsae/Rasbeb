@@ -126,14 +126,16 @@ public class SheetOfStudentInfo {
                         String name = getStringValueOrNull(row, 1);
                         if (name == null || name.trim().isEmpty()) {
                             data.setErrorCode("spreadsheet.name.empty");
+                        } else {
+                            data.setName(name.trim());
                         }
-                        data.setName(name.trim());
 
                         String firstName = getStringValueOrNull(row, 2);
                         if (firstName == null || firstName.trim().isEmpty()) {
                             data.setErrorCode("spreadsheet.firstname.empty");
+                        } else {
+                            data.setFirstName(firstName.trim());
                         }
-                        data.setFirstName(firstName.trim());
 
                         data.setEmail(getStringValueOrNull(row, 3));
 
