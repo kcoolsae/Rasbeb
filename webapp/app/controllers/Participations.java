@@ -1,32 +1,32 @@
 /* Participations.java
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Copyright (C) 2015 Universiteit Gent
- * 
+ *
  * This file is part of the Rasbeb project, an interactive web
  * application for Bebras competitions.
- * 
+ *
  * Corresponding author:
- * 
+ *
  * Kris Coolsaet
  * Department of Applied Mathematics, Computer Science and Statistics
- * Ghent University 
+ * Ghent University
  * Krijgslaan 281-S9
  * B-9000 GENT Belgium
- * 
+ *
  * The Rasbeb Web Application is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * The Rasbeb Web Application is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with the Degage Web Application (file LICENSE in the
  * distribution).  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 
 package controllers;
@@ -137,10 +137,11 @@ public class Participations extends Controller {
     @InjectContext
     public static Result takeOverStart(int lcId) {
         LocalContest lc = DataAccess.getInjectedContext().getLocalContestDAO().getLocalContest(lcId);
-        if (lc.getStatus() != LCStatus.OPEN) {
+        if (lc.getStatus() == LCStatus.OPEN) {
+            return ok(views.html.participation.takeover.render(lc));
+        } else {
             return badRequest();
         }
-        return ok(views.html.participation.takeover.render(lc));
     }
 
     /**
@@ -204,11 +205,32 @@ public class Participations extends Controller {
     }
 
     /**
+     * Retrieve the current participation id.
+     * Returns 0 if no participation is current and signals an error to the user. (Use case: using back button after time out.)
+     * Returns 0 if no participation is current and signals an error to the user. (Use case: using back button after time out.)
+     */
+    private static int getParticipationId() {
+        String part = session("part");
+        if (part != null) {
+            try {
+                return Integer.parseInt(part);
+            } catch (NumberFormatException ex) {
+                // error is reported below
+            }
+        }
+        flash("error", "contest.forced.closed");
+        return 0;
+    }
+
+    /**
      * Shows the question with given index in the current participation
      */
     @InjectContext
     public static Result showQuestion(int index) {
-        int pid = Integer.parseInt(session("part")); // TODO: errors
+        int pid = getParticipationId();
+        if (pid == 0) {
+            return redirectToHome();
+        }
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
         Participation part = dao.get(pid);
 
@@ -329,20 +351,23 @@ public class Participations extends Controller {
         if (answer != null && answer.isEmpty()) {
             answer = null;
         }
-        int pid = Integer.parseInt(session("part"));
+        int pid = getParticipationId();
+        if (pid == 0) {
+            return redirectToHome();
+        }
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
         Participation part = dao.get(pid);
 
         if (part.getStatus() != be.bebras.rasbeb.db.data.Status.DEFAULT) {
-            return redirectToClosed(part.getContestType(), pid);
+            return redirectToClosed(part.getContestType(), pid);  // participation was already closed
         } else if (part.getSecondsLeft() < -10) {
             flash("error", "contest.forced.closed");
-            return finished();
+            return finished(); // time is up, answer is no longer registered
         } else {
             dao.updateAnswer(pid, index, answer);
             if (part.getSecondsLeft() < 0) {
                 flash("error", "contest.forced.just.closed");
-                return finished();
+                return finished(); // answer still counts, but time is up
             } else {
                 return redirect(routes.Participations.showQuestion(index + 1));
             }
@@ -354,7 +379,10 @@ public class Participations extends Controller {
      */
     @InjectContext
     public static Result showFinished() {
-        int pid = Integer.parseInt(session("part")); // TODO: errors
+        int pid = getParticipationId();
+        if (pid == 0) {
+            return redirectToHome();
+        }
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
         Participation part = dao.get(pid);
 
@@ -371,10 +399,20 @@ public class Participations extends Controller {
      */
     @InjectContext
     public static Result finished() {
-        int pid = Integer.parseInt(session("part")); // TODO: errors
+        int pid = getParticipationId();
+        if (pid == 0) {
+            return redirectToHome();
+        }
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
         dao.closeParticipation(pid);
         return redirectToClosed(dao.get(pid).getContestType(), pid);
+    }
+
+    /**
+     * Redirect to the home page.
+     */
+    private static Result redirectToHome() {
+        return redirect(routes.Application.index());
     }
 
     /**
@@ -462,7 +500,7 @@ public class Participations extends Controller {
      */
     public static Result terminate() {
         session().remove("feedback");
-        return redirect(routes.Application.index());
+        return redirectToHome();
     }
 
     /**
