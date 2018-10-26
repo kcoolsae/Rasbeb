@@ -207,7 +207,6 @@ public class Participations extends Controller {
     /**
      * Retrieve the current participation id.
      * Returns 0 if no participation is current and signals an error to the user. (Use case: using back button after time out.)
-     * Returns 0 if no participation is current and signals an error to the user. (Use case: using back button after time out.)
      */
     private static int getParticipationId() {
         String part = session("part");
