@@ -77,7 +77,7 @@ public class Schools extends Controller {
 
         args.list = dao.listSchoolsOfCurrentYear(filter, valueOf(sorter.sortColumn()), sorter.ascending(),
                 pager.offset(), pager.limit());
-        args.count = (int)dao.countSchools(filter);
+        args.count = (int)dao.countSchoolsOfCurrentYear(filter);
         args.f = sf;
         args.p = pager;
         args.s = sorter;
