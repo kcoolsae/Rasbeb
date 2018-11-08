@@ -315,4 +315,21 @@ public class LocalContestDAOImpl extends AbstractDAOImpl implements LocalContest
         }
 
     }
+
+    @Override
+    public void closeParticipations(int lcId) {
+        try (PreparedStatement stat = prepareStatement(
+                "SELECT close_participation(p.id, ?) " +
+                        "FROM contest_permission as c " +
+                        "JOIN local_contest as l on l.id=c.lc_id " +
+                        "JOIN participation as p on p.user_id=c.userid and p.contest_id=l.contest_id " +
+                        "WHERE l.id = ? AND p.status <> 3"
+        )) {
+            stat.setInt(1, context.getUserId());
+            stat.setInt(2, lcId);
+            stat.executeQuery();
+        } catch (SQLException ex) {
+            throw convert(ex);
+        }
+    }
 }

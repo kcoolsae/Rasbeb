@@ -278,6 +278,8 @@ public class TeacherContests extends Controller {
                 break;
             case CLOSED:
                 dao.updateStatus(lcId, status);
+                dao.closeParticipations (lcId);      // close all participations that are still open
+
                 return redirect(routes.TeacherContests.start(lcId));
             // TODO: remaining cases
             default:

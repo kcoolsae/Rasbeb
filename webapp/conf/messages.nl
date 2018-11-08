@@ -58,8 +58,8 @@ error.question.upload=Er is iets fout gegaan bij het uploaden van één van de Z
 # When successful
 
 success.first = Een eerste administrator-account is met succes aangemaakt.
-success.logout = Je bent met success afgemeld.
-success.changepass = Je wachtwoord is met success veranderd.
+success.logout = Je bent met succes afgemeld.
+success.changepass = Je wachtwoord is met succes veranderd.
 success.registration.student = Je kan nu inloggen in het systeem maar je leraar/onderwijzer zal je nog \
    verder toegang moeten geven vooraleer je aan de wedstrijd(en) kunt deelnemen
 success.registration.teacher = Je kunt vanaf nu inloggen in het systeem.

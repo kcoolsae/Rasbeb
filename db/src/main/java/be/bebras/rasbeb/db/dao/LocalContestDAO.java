@@ -119,6 +119,11 @@ public interface LocalContestDAO {
     public void updateStatus(int lcId, Status status);
 
     /**
+     * Close all open participations for the given local contest.
+     */
+    public void closeParticipations (int lcId);
+
+    /**
      * List all local contests for which the current user has permission. Also indicates whether a
      * participation record exists for the current user.
      */
