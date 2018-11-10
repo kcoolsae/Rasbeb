@@ -57,7 +57,7 @@ CREATE TABLE contest_i18n (
 CREATE TABLE contest_level (
     contest_id INTEGER REFERENCES contest,
     lvl INTEGER,
-    minutes INTEGER DEFAULT 45,
+    minutes INTEGER DEFAULT 40,
 
     time_modified TIMESTAMP,
     who_modified INTEGER,
