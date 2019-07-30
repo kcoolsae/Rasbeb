@@ -31,7 +31,6 @@
 
 package be.bebras.rasbeb.db.util;
 
-import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -60,6 +59,38 @@ public final class SecurityUtils {
         }
     }
 
+    private static byte[] parseHexBinary(String str) {
+        // replaces call to javax.xml.bin.DataConverter.parseHexBinary (since Java 9)
+        byte[] result = new byte[str.length() / 2];
+        for (int i = 0; i < result.length; i++) {
+            int total = 0;
+            for (int j = 0; j < 2; j++) {
+                char ch = str.charAt(2 * i + j);
+                if (ch >= '0' && ch <= '9') {
+                    total = 16 * total + ch - '0';
+                } else if (ch >= 'A' && ch <= 'F') {
+                    total = 16 * total + ch - 'A' + 10;
+                } else if (ch >= 'a' && ch <= 'f') {
+                    total = 16 * total + ch - 'a' + 10;
+                }
+            }
+            result[i] = (byte)total;
+        }
+        return result;
+    }
+
+    /**
+     * Convert byte array to hex.
+     */
+    private static String printHexBinary(byte[] bytes) {
+        // replaces call to javax.xml.bin.DataConverter.printHexBinary (since Java 9)
+        StringBuilder builder = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes)
+            builder.append(String.format("%02x", b));
+        return builder.toString();
+    }
+
+
     private static void nextBytes(byte[] bytes) {
         secureRandom.nextBytes(bytes);
         useCount++;
@@ -81,7 +112,7 @@ public final class SecurityUtils {
         result[2] = (byte) (id >> 8);
         result[3] = (byte) (id);
 
-        return DatatypeConverter.printHexBinary(result);
+        return printHexBinary(result);
     }
 
     /**
@@ -90,7 +121,7 @@ public final class SecurityUtils {
     public static String getToken (int size) {
         byte[] result = new byte[size / 2];
         nextBytes(result);
-        return DatatypeConverter.printHexBinary(result);
+        return printHexBinary(result);
     }
 
     /**
@@ -99,8 +130,8 @@ public final class SecurityUtils {
     public static String[] saltAndHash(String password) {
         byte[] result = new byte[8];
         nextBytes(result);
-        String salt = DatatypeConverter.printHexBinary(result);
-        String hash = DatatypeConverter.printHexBinary(getHash (password, result));
+        String salt = printHexBinary(result);
+        String hash = printHexBinary(getHash (password, result));
         return new String[] { salt, hash };
 
     }
@@ -109,8 +140,8 @@ public final class SecurityUtils {
      * Check whether the given password correctly corresponds to salt and hash.
      */
     public static boolean isCorrectPassword (String salt, String hash, String password) {
-        byte[] binSalt = DatatypeConverter.parseHexBinary(salt);
-        byte[] binHash = DatatypeConverter.parseHexBinary(hash);
+        byte[] binSalt = parseHexBinary(salt);
+        byte[] binHash = parseHexBinary(hash);
         byte[] computedHash = getHash(password, binSalt);
         return Arrays.equals(binHash, computedHash);
     }
