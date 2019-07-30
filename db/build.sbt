@@ -8,7 +8,7 @@ organization := "be.bebras.rasbeb"
 
 crossPaths := false
 
-libraryDependencies += "postgresql" % "postgresql" % "9.1-901.jdbc4"
+libraryDependencies += "org.postgresql" % "postgresql" % "42.2.6" % "run"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.10" % "test"
 
