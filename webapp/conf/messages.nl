@@ -112,9 +112,9 @@ spreadsheet.header.marks=##Klas,Naam,Voornaam,Score,Max
 
 student.not.created = Kon niet geregistreerd worden
 
-student.wrong.name = Naam is niet correct
+student.wrong.name = E-mailadres of Bebras ID geassocieerd met een andere naam 
 student.wrong.email = Fout e-mailadres voor dit Bebras ID
-student.wrong.gender = Geslacht is niet correct
+student.wrong.gender = E-mailadres of Bebras ID geassocieerd met een ander geslacht
 student.wrong.bebras = Foute Bebras ID voor dit e-mailadres
 
 # Teachers

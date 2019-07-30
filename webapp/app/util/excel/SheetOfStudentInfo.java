@@ -187,6 +187,7 @@ public class SheetOfStudentInfo {
      * data that corresponds to students that are already registered in this class.
      */
     public static void checkList(List<StudentInClassOrError> list, Map<String, List<Student>> map) {
+        // TODO: also check whether student not already registered for another class!
         Iterator<StudentInClassOrError> iter = list.iterator();
         while (iter.hasNext()) {
             StudentInClassOrError data = iter.next();

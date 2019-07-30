@@ -152,6 +152,11 @@ public class Authentication extends Controller {
         session("role", user.getRole().name());
         session("bebrasId", user.getBebrasId());
         session("stamp", Long.toHexString(new Date().getTime()));
+        //
+        // added in 2018, to avoid pupils that log in ending up in an (anonymous) participation that was
+        // started on the same computer but was not closed, We hope this has no adverse effects
+        session().remove("part");
+        session().remove("feedback");
     }
 
     public static Result logout() {
