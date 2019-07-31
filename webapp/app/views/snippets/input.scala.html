@@ -29,7 +29,7 @@
  * 
  *@
 
-@(field: play.api.data.Field, lang: play.api.i18n.Lang, args: (Symbol, Any)* )(inputDef: (String, String, Option[String], scala.collection.immutable.Map[Symbol,Any]) => Html)
+@(field: play.api.data.Field, msgs: play.api.i18n.Messages, args: (Symbol, Any)* )(inputDef: (String, String, Option[String], scala.collection.immutable.Map[Symbol,Any]) => Html)
 @*
  * Generic HTML input element. Based on the standard @input template helper, but without plugable field constructor
  * and explicit language
@@ -42,11 +42,11 @@
     field,
     inputDef(id, field.name, field.value, args.filter(arg => !arg._1.name.startsWith("_") && arg._1 != 'id).toMap),
     args.toMap,
-    lang
+    msgs
 )}
 
 <tr class="@if(elements.hasErrors) {text-danger}">
     <td class="label"><label for="@elements.id">@elements.label</label></td>
     <td>@elements.input</td>
-    <td><span class="text-danger">@elements.errors(lang).mkString(", ")</span></td>      @* lang must be explicit here for some reason *@
+    <td><span class="text-danger">@elements.errors.mkString(", ")</span></td>
 </tr>

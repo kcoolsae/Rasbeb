@@ -51,12 +51,15 @@ object Global extends GlobalSettings {
   /**
    * Merge additional config files into the application, depending on the current mode
    */
+
+  /* No longer used: config file must now be given as startup parameter
   override def onLoadConfig(config: Configuration, path: File, classloader: ClassLoader, mode: Mode.Mode): Configuration = {
 
     // see http://stackoverflow.com/questions/9723224/how-to-manage-application-conf-in-several-environments-with-play-2-0
 
     config ++ Configuration(ConfigFactory.load(mode.toString.toLowerCase + ".conf"))
   }
+  */
 
   /**
    * Initialize the data access provider for this application

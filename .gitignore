@@ -11,4 +11,5 @@ test.conf
 prod.conf
 dev.hikaricp.properties
 prod.hikaricp.properties
+application.conf
 

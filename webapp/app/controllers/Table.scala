@@ -33,7 +33,6 @@ package controllers
 
 import play.mvc.Call
 import bindings.{Sorter, Pager}
-import play.api.templates.Html
 
 /**
  * Backend object for data tables with sort buttons and paging buttons and an enclosing form

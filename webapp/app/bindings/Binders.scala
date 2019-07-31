@@ -31,7 +31,7 @@
 
 package bindings
 
-import play.api.mvc.{JavascriptLitteral, QueryStringBindable}
+import play.api.mvc.QueryStringBindable
 import be.bebras.rasbeb.db.data.Role
 
 /**
@@ -39,7 +39,9 @@ import be.bebras.rasbeb.db.data.Role
  */
 object Binders {
 
-  implicit def queryStringBinder = new QueryStringBindable[Role] with JavascriptLitteral[Role] {
+  /* not used? No query string parameters of type Role?
+
+  implicit def queryStringBinder = new QueryStringBindable[Role] {
 
     override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, Role]] = {
       params.get(key).flatMap(_.headOption) match {
@@ -52,7 +54,6 @@ object Binders {
       key + "=" + role.name()
     }
 
-    override def to(role: Role) = role.name()
-
   }
+  */
 }

@@ -29,13 +29,14 @@
  * 
  *@
 
-@(field: play.api.data.Field, args: (Symbol,Any)*)(implicit lang: play.api.i18n.Lang)
+@import org.postgresql.gss.MakeGSS
+@(field: play.api.data.Field, args: (Symbol,Any)*)(implicit msgs: play.api.i18n.Messages)
 @**
  * Generate an HTML text input. Based on the standard template helper, but without plugable field constructor
  *@
 
 @inputType = @{ args.toMap.get('type).map(_.toString).getOrElse("text") }
 
-@input(field, lang, args.filter(_._1 != 'type):_*) { (id, name, value, htmlArgs) =>
+@input(field, msgs, args.filter(_._1 != 'type):_*) { (id, name, value, htmlArgs) =>
     <input type="@inputType" id="@id" name="@name" value="@value" @toHtmlArgs(htmlArgs)>
 }
