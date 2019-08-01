@@ -17,13 +17,21 @@ libraryDependencies ++= Seq(
 resolvers += Resolver.url("Edulify Repository", url("http://edulify.github.io/modules/releases/"))(Resolver.ivyStylePatterns)
 
 libraryDependencies ++= Seq(
-  "be.bebras.rasbeb" % "testmail" % "1.0-SNAPSHOT",
   "be.bebras.rasbeb" % "db" % "1.2-SNAPSHOT",
   "org.springframework" % "spring-beans" % "4.1.1.RELEASE", // needed for recursive direct field binding
   "org.springframework" % "spring-context" % "4.1.1.RELEASE", // to be compatible with the above
   "com.edulify"             %% "play-hikaricp"               % "1.4.1",
-  "com.typesafe.play" %% "play-mailer" % "6.0.0",
+  "com.typesafe.play" %% "play-mailer" % "4.0.0",
   "org.apache.poi" % "poi-ooxml" % "3.9"
+)
+
+// The following are needed at runtime because the Hibernate Validator needs them. Hopefully they
+// can be thrown out with later version of play?
+libraryDependencies ++= Seq(
+  "javax.activation" % "activation" % "1.1.1" % Runtime,
+  "javax.xml.bind" % "jaxb-api" % "2.3.0" % Runtime,
+  "com.sun.xml.bind" % "jaxb-core" % "2.3.0" % Runtime,
+  "com.sun.xml.bind" % "jaxb-impl" % "2.3.0" % Runtime
 )
 
 // Correct Java Level

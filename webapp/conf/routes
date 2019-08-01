@@ -148,7 +148,7 @@ GET     /schools            controllers.Schools.list(f:SchoolsFilter ?= SchoolsF
 POST    /schools/filter     controllers.Schools.filter(s:Sorter,p:Pager)
 POST    /schools/size       controllers.Schools.resize(f:SchoolsFilter,s:Sorter,offset: Int)
 
-GET     /school/:id         controllers.Schools.show(id:Int)
+GET     /school/show/:id    controllers.Schools.show(id:Int)
 GET     /school/new         controllers.Schools.showNew()
 
 # Teacher related

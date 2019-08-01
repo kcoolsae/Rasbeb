@@ -29,20 +29,16 @@
  * 
  */
 
-import com.typesafe.config.ConfigFactory
 import db.DataAccess
-import java.io.File
-import java.util.Date
 import play.api.db.DB
-import play.api.mvc.{RequestHeader, Handler}
-import play.api.{Configuration, Mode, Application, GlobalSettings}
+import play.api.{Application, GlobalSettings, Mode}
 
 /**
  * Adapts the global settings object to our needs.
  */
 object Global extends GlobalSettings {
 
-  lazy val smtpEchoServer = new SmtpEchoServer()
+  //  lazy val smtpEchoServer = new SmtpEchoServer()
 
   // we have chosen the Scala version because the Java version does not have a Mode parameter
   // in onLoadConfig. Bug?
@@ -70,7 +66,7 @@ object Global extends GlobalSettings {
     app.mode match {
       case Mode.Dev =>
         DataAccess.setProviderFromDataSource(DB.getDataSource("dev")(app))
-        smtpEchoServer.start()
+      // smtpEchoServer.start() // using mock=yes functionality of play.mailer
       case Mode.Prod =>
         DataAccess.setProviderFromDataSource(DB.getDataSource("prod")(app))
       case Mode.Test =>
@@ -82,34 +78,18 @@ object Global extends GlobalSettings {
   /**
    * Stop the mail server
    */
+/*
   override def onStop(app: Application) {
     app.mode match {
       case Mode.Dev =>
-        smtpEchoServer.stop()
+        // smtpEchoServer.stop() // TODO use mock=yes functionality of play.mailer
       case Mode.Prod =>
-        // currently nothing needs to be done
+      // currently nothing needs to be done
       case Mode.Test =>
-        // currently nothing needs to be done
+      // currently nothing needs to be done
     }
   }
-
-  /*
-   * Expires the session if not active long enough, otherwise refreshes the session
-   * @return
-   */
-/*
-  override def onRouteRequest (request: RequestHeader): Option[Handler] = {
-      val old = java.lang.Long.parseLong(request.session("stamp"),16);
-      val now = new Date().getTime
-      if (now - old > 4800*1000) {
-        // 80 minutes no action expires the  session
-        super.onRouteRequest(request.session)
-      } else {
-        request.session.data.("stamp", java.lang.Long.toHexString(now));
-      }
-
-      super.onRouteRequest(request)
-  }*/
+*/
 
 
 }

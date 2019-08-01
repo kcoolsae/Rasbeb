@@ -457,7 +457,7 @@ public class Participations extends Controller {
 
         // check whether public (maybe redundant?)
         if (part.getContestType() != ContestType.PUBLIC) {
-            badRequest();
+            return badRequest();
         }
 
         List<ShowClosedDetail> result = getClosedDetails(pid, dao);
@@ -517,7 +517,7 @@ public class Participations extends Controller {
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
         Participation part = dao.findParticipationWithStatus(contestId, level, be.bebras.rasbeb.db.data.Status.CLOSED);
         if (part == null) {
-            badRequest();
+            return badRequest();
         }
 
         int pid = part.getId();

@@ -42,6 +42,7 @@ import db.InjectContext;
 import play.Play;
 import play.data.Form;
 import play.i18n.Messages;
+import play.inject.guice.GuiceApplicationBuilder;
 import play.libs.mailer.Email;
 import play.libs.mailer.MailerClient;
 import play.mvc.Controller;
@@ -104,7 +105,8 @@ public class Registration extends Controller {
                 .setFrom(Messages.get("mail.noreply.address"))
                 .addTo(to)
                 .setBodyText(text);
-        Play.application().plugin(MailerClient.class).send(email);
+        // TODO: change this to proper injection
+        new GuiceApplicationBuilder().injector().instanceOf(MailerClient.class).send(email);
     }
 
 
