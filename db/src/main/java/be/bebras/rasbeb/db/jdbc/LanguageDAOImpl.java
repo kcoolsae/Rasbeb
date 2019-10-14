@@ -51,6 +51,10 @@ class LanguageDAOImpl implements LanguageDAO {
 
     private Map<String, Language> map;
 
+    /**
+     * Create a new DAO of this type using the given connection. The connection
+     * should be closed after creation.
+     */
     public LanguageDAOImpl(Connection connection) {
         try (Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery("SELECT lang,description FROM i18n ORDER BY lang")) {

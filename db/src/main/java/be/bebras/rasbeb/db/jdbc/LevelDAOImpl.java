@@ -51,8 +51,11 @@ public class LevelDAOImpl implements LevelDAO {
 
     private List<Level> list = new ArrayList<>();
 
+    /**
+     * Create a new DAO of this type using the given connection. The connection
+     * should be closed after creation.
+     */
     public LevelDAOImpl(Connection connection, String lang) {
-
         try (PreparedStatement stat = connection.prepareStatement(
                 "SELECT id,lang,name,description FROM lvl WHERE lang = ?")) {
             stat.setString(1, lang);

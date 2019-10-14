@@ -38,6 +38,7 @@ import be.bebras.rasbeb.db.dao.LevelDAO;
 import be.bebras.rasbeb.db.data.Role;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +47,6 @@ import java.util.Map;
  * Implementation of a data access provider based on JDBC.
  */
 class JDBCDataAccessProvider implements DataAccessProvider {
-
 
     JDBCDataAccessProvider(boolean testDatabase, DataSource dataSource) {
         this.testDatabase = testDatabase;
@@ -84,8 +84,8 @@ class JDBCDataAccessProvider implements DataAccessProvider {
 
     public synchronized LanguageDAO getLanguageDAO() {
         if (languageDAO == null) {
-            try {
-                languageDAO = new LanguageDAOImpl(dataSource.getConnection());
+            try (Connection connection = dataSource.getConnection()) {
+                languageDAO = new LanguageDAOImpl(connection);
             } catch (SQLException ex) {
                 throw AbstractDAOImpl.convert( ex);
             }
@@ -98,8 +98,8 @@ class JDBCDataAccessProvider implements DataAccessProvider {
     public synchronized LevelDAO getLevelDAO(String lang) {
         LevelDAO levelDAO = levelDAOMap.get(lang);
          if (levelDAO == null) {
-             try {
-                 levelDAO = new LevelDAOImpl (dataSource.getConnection(), lang);
+             try (Connection connection = dataSource.getConnection()){
+                 levelDAO = new LevelDAOImpl (connection, lang);
                  levelDAOMap.put (lang, levelDAO);
              } catch (SQLException ex) {
                  throw AbstractDAOImpl.convert(ex);

@@ -20,7 +20,6 @@ libraryDependencies ++= Seq(
   "be.bebras.rasbeb" % "db" % "1.2-SNAPSHOT",
   "org.springframework" % "spring-beans" % "4.1.1.RELEASE", // needed for recursive direct field binding
   "org.springframework" % "spring-context" % "4.1.1.RELEASE", // to be compatible with the above
-  "com.edulify"             %% "play-hikaricp"               % "1.4.1",
   "com.typesafe.play" %% "play-mailer" % "4.0.0",
   "org.apache.poi" % "poi-ooxml" % "3.9"
 )
