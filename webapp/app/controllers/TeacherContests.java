@@ -35,7 +35,6 @@ import be.bebras.rasbeb.db.DataAccessContext;
 import be.bebras.rasbeb.db.dao.ContestDAO;
 import be.bebras.rasbeb.db.dao.LocalContestDAO;
 import be.bebras.rasbeb.db.dao.TeacherSchoolClassDAO;
-import be.bebras.rasbeb.db.data.ContestType;
 import be.bebras.rasbeb.db.data.LCStatus;
 import be.bebras.rasbeb.db.data.Level;
 import be.bebras.rasbeb.db.data.LocalContest;

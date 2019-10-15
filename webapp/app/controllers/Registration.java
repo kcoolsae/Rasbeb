@@ -42,14 +42,17 @@ import db.InjectContext;
 import play.Play;
 import play.data.Form;
 import play.i18n.Messages;
-import play.inject.guice.GuiceApplicationBuilder;
-import play.libs.mailer.Email;
 import play.libs.mailer.MailerClient;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import util.Mail;
+import views.html.registration.language;
+import views.html.registration.list;
+import views.html.registration.next;
+import views.html.registration.start;
 
-import views.html.registration.*;
+import javax.inject.Inject;
 
 /**
  * Registration of new users
@@ -97,18 +100,16 @@ public class Registration extends Controller {
         }
     }
 
-    // also used in Reset class
-    static void sendEmail(String subject, String to, String text) {
-        Email email = new Email()
-                .setSubject(subject)
-                .setCharset("UTF-8")
-                .setFrom(Messages.get("mail.noreply.address"))
-                .addTo(to)
-                .setBodyText(text);
-        // TODO: change this to proper injection
-        new GuiceApplicationBuilder().injector().instanceOf(MailerClient.class).send(email);
-    }
+    // TODO: change this to proper injection in play 2.5.x
 
+    @Inject
+    MailerClient mailerClient;
+    /*private static MailerClient mailerClient = new SMTPMailer(
+            SMTPConfiguration$.MODULE$.apply(
+                    PlayConfig$.MODULE$.apply(
+                            Play.application().configuration().getWrappedConfiguration()
+                    )));
+*/
 
     /**
      * Sends an login to the user that wants to be registered
@@ -127,7 +128,7 @@ public class Registration extends Controller {
         // if a user with this login address already exists, then warn him by login
         User user = DataAccess.getInjectedContext().getUserDAO().findUserByEmail(emailData.email);
         if (user != null) {
-            sendEmail(
+            Mail.sendEmail(
                     Messages.get("mail.registration.user.exists"),
                     address,
                     views.txt.registration.mailUserExists.render(request().remoteAddress()).body().trim()
@@ -137,7 +138,7 @@ public class Registration extends Controller {
             String baseURL = request().getHeader("Referer");
             int pos = baseURL.indexOf("/re"); // same for both /reset and /register ?!
             baseURL = baseURL.substring(0, pos);
-            sendEmail(
+            Mail.sendEmail(
                     Messages.get("mail.registration.send.token"),
                     address,
                     views.txt.registration.mailToken.render(baseURL, token).body().trim()

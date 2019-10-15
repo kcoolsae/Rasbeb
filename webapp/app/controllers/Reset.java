@@ -37,14 +37,15 @@ import be.bebras.rasbeb.db.data.User;
 import data.validation.ExtendedEmail;
 import db.DataAccess;
 import db.InjectContext;
-import play.Play;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Result;
-
-import views.html.reset.*;
+import util.Mail;
+import views.html.reset.next;
+import views.html.reset.start;
+import views.html.reset.tokenSent;
 
 /**
  * Reset password of existing users.
@@ -83,7 +84,7 @@ public class Reset extends Controller {
             String baseURL = request().getHeader("Referer");
             int pos = baseURL.indexOf("/re"); // same for both /reset and /register ?!
             baseURL = baseURL.substring(0, pos);
-            Registration.sendEmail(
+            Mail.sendEmail(
                     Messages.get("mail.reset.send.token"),
                     address,
                     views.txt.reset.mailToken.render(baseURL, token).body().trim()

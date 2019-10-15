@@ -31,7 +31,10 @@
 
 import db.DataAccess
 import play.api.db.DB
+import play.api.libs.mailer.{SMTPConfiguration, SMTPMailer}
 import play.api.{Application, GlobalSettings, Mode}
+import play.libs.mailer.MailerClient
+import util.Mail
 
 /**
  * Adapts the global settings object to our needs.
@@ -63,6 +66,8 @@ object Global extends GlobalSettings {
    */
   override def onStart(app: Application) {
 
+    Mail.setupMailerClient(app.configuration);
+
     app.mode match {
       case Mode.Dev =>
         DataAccess.setProviderFromDataSource(DB.getDataSource("dev")(app))
@@ -78,18 +83,18 @@ object Global extends GlobalSettings {
   /**
    * Stop the mail server
    */
-/*
-  override def onStop(app: Application) {
-    app.mode match {
-      case Mode.Dev =>
-        // smtpEchoServer.stop() // TODO use mock=yes functionality of play.mailer
-      case Mode.Prod =>
-      // currently nothing needs to be done
-      case Mode.Test =>
-      // currently nothing needs to be done
+  /*
+    override def onStop(app: Application) {
+      app.mode match {
+        case Mode.Dev =>
+          // smtpEchoServer.stop() // TODO use mock=yes functionality of play.mailer
+        case Mode.Prod =>
+        // currently nothing needs to be done
+        case Mode.Test =>
+        // currently nothing needs to be done
+      }
     }
-  }
-*/
+  */
 
 
 }
