@@ -71,13 +71,13 @@ public class InjectContextWrapper extends Action<InjectContext> {
                     F.Promise<Result> result = delegate.call(httpContext);
                     context.commit();
                     return result;
-                } finally {
-                    context.rollback();
-                }
-//                catch (Exception ex) {
+//                } finally {
 //                    context.rollback();
-//                    throw ex;
 //                }
+                } catch (Exception ex) {
+                    context.rollback();
+                    throw ex;
+                }
             } else {
                 return delegate.call(httpContext);
             }
