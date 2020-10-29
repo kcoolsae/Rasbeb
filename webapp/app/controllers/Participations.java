@@ -31,6 +31,7 @@
 
 package controllers;
 
+import be.bebras.rasbeb.db.KeyNotFoundException;
 import be.bebras.rasbeb.db.dao.LocalContestDAO;
 import be.bebras.rasbeb.db.dao.ParticipationDAO;
 import be.bebras.rasbeb.db.dao.QuestionSetDAO;
@@ -57,14 +58,18 @@ public class Participations extends Controller {
      */
     @InjectContext
     public static Result showStart(int id, int level) {
-
-        Contest contest = DataAccess.getInjectedContext().getContestDAO().getContest(id);
-        if (contest.getType() != ContestType.PUBLIC) {
-            return badRequest();
+        try {
+            Contest contest = DataAccess.getInjectedContext().getContestDAO().getContest(id);
+            if (contest.getType() != ContestType.PUBLIC) {
+                return badRequest();
+            }
+            Level lvl = DataAccess.getInjectedContext().getLevelDAO().getLevel(level);
+            int minutes = DataAccess.getInjectedContext().getContestDAO().getDuration(id, level);
+            return ok(views.html.participation.show.render(contest, lvl, minutes));
+        } catch (KeyNotFoundException ex) {
+            // we assume that this is because an invalid language was used? (Has been known to happen.)
+            return redirect(routes.Language.init());
         }
-        Level lvl = DataAccess.getInjectedContext().getLevelDAO().getLevel(level);
-        int minutes = DataAccess.getInjectedContext().getContestDAO().getDuration(id, level);
-        return ok(views.html.participation.show.render(contest, lvl, minutes));
     }
 
     /**

@@ -97,7 +97,11 @@ public class Application extends Controller {
     public static Result home() {
         ContestDAO dao = DataAccess.getInjectedContext().getContestDAO();
         Iterable<ContestDAO.ContestAvailableLevels> available = dao.listAvailablePublicContests();
-        return ok(home.render(available));
+        if (available.iterator().hasNext()) {
+            return ok(home.render(available));
+        } else {
+            return ok(homeEmpty.render());
+        }
     }
 
 
