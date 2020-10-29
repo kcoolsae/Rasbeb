@@ -37,6 +37,8 @@ package be.bebras.rasbeb.db;
  */
 public class KeyNotFoundException extends DataAccessException {
 
+    private static final long serialVersionUID = -7191061988719481276L;
+
     private String key;
 
     public String getKey() {

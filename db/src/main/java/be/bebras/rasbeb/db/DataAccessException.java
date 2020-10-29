@@ -36,6 +36,8 @@ package be.bebras.rasbeb.db;
  */
 public class DataAccessException extends RuntimeException {
 
+    private static final long serialVersionUID = -653280206615045486L;
+
     public DataAccessException(String message, Throwable cause) {
         super(message, cause);
     }

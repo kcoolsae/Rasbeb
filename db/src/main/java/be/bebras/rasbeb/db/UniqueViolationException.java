@@ -36,6 +36,8 @@ package be.bebras.rasbeb.db;
  */
 public class UniqueViolationException extends DataAccessException {
 
+    private static final long serialVersionUID = -6393658458340444414L;
+
     public UniqueViolationException(String message, Throwable cause) {
         super(message, cause);
     }

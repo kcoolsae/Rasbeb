@@ -37,6 +37,8 @@ package be.bebras.rasbeb.db;
  */
 public class DataFrozenException extends DataAccessException {
 
+    private static final long serialVersionUID = 6428271332514582229L;
+
     public DataFrozenException(String message) {
         super(message, null);
     }

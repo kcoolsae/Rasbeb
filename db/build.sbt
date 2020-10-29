@@ -8,15 +8,15 @@ organization := "be.bebras.rasbeb"
 
 crossPaths := false
 
-libraryDependencies += "org.postgresql" % "postgresql" % "42.2.6" // not Runtime because we refer to PGSimpleDatasource somewhere
-libraryDependencies += "com.novocode" % "junit-interface" % "0.10" % "test"
+libraryDependencies += "org.postgresql" % "postgresql" % "42.2.18" // not Runtime because we refer to PGSimpleDatasource somewhere
+libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
 
 autoScalaLibrary := false
 
 parallelExecution in Test := false
 
 javacOptions in Compile ++= Seq("-source", "1.8", "-target", "1.8", "-encoding", "UTF-8", "-Xlint", "-Xlint:-processing")
-publishArtifact in (Compile, packageDoc) := false // oiltherwise there is a javadoc error
+publishArtifact in (Compile, packageDoc) := false // otherwise there is a javadoc error
 
 //unmanagedSourceDirectories in Compile += baseDirectory.value / "src"/ "main" / "sql"
 //

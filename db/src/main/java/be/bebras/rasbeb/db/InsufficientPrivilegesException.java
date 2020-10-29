@@ -39,6 +39,8 @@ import be.bebras.rasbeb.db.data.Privilege;
  */
 public class InsufficientPrivilegesException extends DataAccessException {
 
+    private static final long serialVersionUID = -6968556955150472067L;
+
     private Privilege privilege;
 
     public Privilege getPrivilege() {

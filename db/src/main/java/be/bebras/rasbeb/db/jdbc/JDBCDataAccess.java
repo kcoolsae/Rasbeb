@@ -72,8 +72,8 @@ public final class JDBCDataAccess {
     private static DataAccessProvider createTestDataAccessProvider() {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
 
-        dataSource.setServerName("localhost");
-        dataSource.setPortNumber(5432);
+        dataSource.setServerNames(new String[] { "localhost" });
+        dataSource.setPortNumbers(new int[] { 5432 });
         dataSource.setDatabaseName("rasbeb_test");
         dataSource.setUser("rasbeb_tester");
         dataSource.setPassword("test_password");
