@@ -120,6 +120,4 @@ public interface ContestDAO {
      */
     public boolean freezeContest(int id, int level, String language);
 
-    // TODO: disable certain updates when (part of) a contest is frozen
-
 }

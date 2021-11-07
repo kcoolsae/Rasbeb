@@ -314,7 +314,11 @@ public class Participations extends Controller {
      */
     @InjectContext
     public static Result showFeedback(int index) {
-        int pid = Integer.parseInt(session("feedback")); // TODO: errors
+        String pidString = session("feedback");
+        if (pidString == null) {
+            return redirectToHome();
+        }
+        int pid = Integer.parseInt(pidString);
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
         int count = dao.countDetails(pid);
         if (index > count) {
@@ -456,7 +460,11 @@ public class Participations extends Controller {
      */
     @InjectContext
     public static Result showClosed() {
-        int pid = Integer.parseInt(session("feedback")); // TODO: errors
+        String pidString = session("feedback");
+        if (pidString == null) {
+            return redirectToHome();
+        }
+        int pid = Integer.parseInt(pidString);
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
         Participation part = dao.get(pid);
 
@@ -489,7 +497,11 @@ public class Participations extends Controller {
      */
     @InjectContext
     public static Result showTerminate() {
-        int pid = Integer.parseInt(session("feedback")); // TODO: errors
+        String pidString = session("feedback");
+        if (pidString == null) {
+            return redirectToHome();
+        }
+        int pid = Integer.parseInt(pidString);
         ParticipationDAO dao = DataAccess.getInjectedContext().getParticipationDAO();
         Participation part = dao.get(pid);
         if (part.getContestType() == ContestType.PUBLIC) {

@@ -96,7 +96,11 @@ public class StudentInClassOrError {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (email == null || email.trim().isEmpty()) {
+            this.email = null;
+        } else {
+            this.email = email;
+        }
     }
 
     public void setMale(Boolean male) {
@@ -104,7 +108,11 @@ public class StudentInClassOrError {
     }
 
     public void setBebrasId(String bebrasId) {
-        this.bebrasId = bebrasId;
+        if (bebrasId == null || bebrasId.trim().isEmpty()) {
+            this.bebrasId = null;
+        } else {
+            this.bebrasId = bebrasId;
+        }
     }
 
     public void setInitialPassword(String initialPassword) {
