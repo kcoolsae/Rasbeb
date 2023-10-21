@@ -89,7 +89,8 @@ CREATE OR REPLACE FUNCTION grant_permission_to_class(INTEGER,TEXT,INTEGER)
          EXCEPT
          SELECT userId FROM contest_permission WHERE lc_id = $1
       LOOP
-         INSERT INTO contest_permission(lc_id,userId,who_created) VALUES ($1,id,$3);
+         INSERT INTO contest_permission(lc_id,userId,who_created) VALUES ($1,id,$3)
+         ON CONFLICT (lc_id,userId) DO NOTHING;
       END LOOP;
     END
 $$ LANGUAGE 'plpgsql';

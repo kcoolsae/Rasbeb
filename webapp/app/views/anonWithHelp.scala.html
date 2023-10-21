@@ -37,7 +37,10 @@
         <ul class="nav">
             @menuItem(pageId, "W", routes.Application.index) {Start} {Accueil} {Home}
             @menuItem(pageId, "L", routes.Authentication.loginForm) {Aanmelden} {Connecter} {Login}
-            <li class="pullright"><a href='@routes.Assets.at(lang.code + "/help.html")' target='help'>@nlfren {Hulp} {Aide} {Help}</a></li>
+            <li class="pullright">
+                <a href='@routes.Assets.at(lang.code + "/help.html")' target='help'>@nlfren {Hulp} {Aide} {Help}</a>
+            </li>
+            <li class="pullright"><a href="@routes.Language.init()">nl/fr/en</a></li>
         </ul>
     </div>
 } {
